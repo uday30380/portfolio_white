@@ -1,0 +1,21 @@
+{
+    "name": "Uday Kiran Portfolio",
+    "short_name": "Uday Portfolio",
+    "description": "Portfolio of Vempati Uday Kiran - AI Web Developer",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#0a0a0a",
+    "theme_color": "#f97316",
+    "icons": [
+        {
+            "src": "/vite.svg",
+            "sizes": "192x192",
+            "type": "image/svg+xml"
+        },
+        {
+            "src": "/vite.svg",
+            "sizes": "512x512",
+            "type": "image/svg+xml"
+        }
+    ]
+}

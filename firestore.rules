@@ -1,0 +1,27 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Explicitly allow public to create messages (Contact Form)
+    match /messages/{messageId} {
+      allow create: if true;
+      allow read, update, delete: if request.auth != null;
+    }
+
+    // Publicly readable settings (like Announcements)
+    match /settings/global_announcement {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // Allow public read access to portfolio content
+    match /content/portfolioData {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+    
+    // Other collections (default lock-down or auth only)
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
