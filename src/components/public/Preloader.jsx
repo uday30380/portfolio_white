@@ -217,14 +217,14 @@ const Preloader = ({ onLoaded }) => {
                 transition: 'opacity 300ms cubic-bezier(0.16, 1, 0.3, 1)',
             }}
         >
-            {/* Monogram UK in Inter, enlarged to 56px-64px semibold, #102A28, with #0F766E dot (UK.) */}
+            {/* Monogram UK in Inter, enlarged to 68px-92px semibold, #102A28, with #0F766E dot (UK.) */}
             <div
                 style={{
-                    fontSize: 'clamp(52px, 7vw, 64px)',
-                    fontWeight: 600,
+                    fontSize: 'clamp(68px, 12vw, 92px)',
+                    fontWeight: 700,
                     color: '#102A28',
                     fontFamily: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-                    letterSpacing: '-0.03em',
+                    letterSpacing: '-0.04em',
                     lineHeight: 1,
                     display: 'flex',
                     alignItems: 'baseline',
@@ -237,11 +237,11 @@ const Preloader = ({ onLoaded }) => {
                 <span style={{ color: '#0F766E' }}>.</span>
             </div>
 
-            {/* Thin progress line: 150px wide, 2.5px tall, track #DDE7E5, fill #0F766E, fully rounded ends */}
+            {/* Thin progress line: 200px wide, 3.5px tall, track #DDE7E5, fill #0F766E, fully rounded ends */}
             <div
                 style={{
-                    width: '150px',
-                    height: '2.5px',
+                    width: '200px',
+                    height: '3.5px',
                     backgroundColor: '#DDE7E5',
                     borderRadius: '9999px',
                     overflow: 'hidden',
