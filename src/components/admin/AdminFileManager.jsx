@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useData } from '../../context/DataContext';
-import { Plus, Trash2, Folder, Image as ImageIcon, FileText, X, Save, ArrowRight } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion'; // eslint-disable-line no-unused-vars
+import { Plus, Trash2, Folder, Image as ImageIcon, Save } from 'lucide-react';
+import ImageUpload from './ImageUpload';
 
 const AdminFileManager = () => {
     const { data, updateData } = useData();
@@ -12,7 +12,7 @@ const AdminFileManager = () => {
 
     const handleAdd = () => {
         if (!newUrl.trim()) return;
-        setAssets([{ id: Date.now(), name: newName || 'Asset Node', url: newUrl, image: newImage }, ...assets]);
+        setAssets([{ id: Date.now(), name: newName || 'Asset item', url: newUrl, image: newImage }, ...assets]);
         setNewUrl('');
         setNewName('');
         setNewImage('');
@@ -24,123 +24,132 @@ const AdminFileManager = () => {
 
     const handleSave = async () => {
         await updateData('assets', assets);
-        alert('Vault synchronization complete.');
+        alert('Media assets saved.');
     };
 
     return (
-        <div className="space-y-10 animate-fade-in text-white">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div className="space-y-6 text-[#102A28]">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <div className="flex items-center gap-3 mb-2">
-                        <div className="w-8 h-[2px] bg-orange-500"></div>
-                        <span className="text-[10px] font-black tracking-[0.3em] text-orange-500 uppercase">Cloud Repository</span>
-                    </div>
-                    <h2 className="text-3xl font-black text-white">We will be doing a quick syncrozar portal</h2>
+                    <h2 className="text-xl font-semibold text-[#102A28]">Media & assets</h2>
+                    <p className="text-xs text-[#8A9B98]">Manage uploaded images, files, and asset links</p>
                 </div>
                 <button
+                    type="button"
                     onClick={handleSave}
-                    className="flex items-center gap-3 px-10 py-4 bg-orange-500 hover:bg-orange-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-orange-500/20 active:scale-95 group"
+                    className="btn-primary"
                 >
-                    <Save size={18} />
-                    <span>Synchronize Vault</span>
+                    <Save size={16} />
+                    <span>Save assets</span>
                 </button>
             </div>
 
-            <div className="grid lg:grid-cols-4 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
                 {/* Uploader Column */}
                 <div className="lg:col-span-1">
-                    <div className="p-8 bg-[#111111] border border-white/5 rounded-[40px] space-y-6 sticky top-8">
-                        <div className="flex items-center gap-3 mb-4">
-                            <Plus className="text-orange-500" size={20} />
-                            <h3 className="text-sm font-black uppercase tracking-widest text-white">Ingest Asset</h3>
+                    <div className="p-6 bg-white border border-[#DDE7E5] rounded-[12px] space-y-4 shadow-sm">
+                        <h3 className="text-sm font-semibold text-[#102A28]">Add new asset</h3>
+
+                        <div>
+                            <label className="block text-xs font-medium text-[#4B5F5C] mb-1.5">Asset name</label>
+                            <input
+                                type="text"
+                                value={newName}
+                                onChange={(e) => setNewName(e.target.value)}
+                                placeholder="e.g. Hero Pattern"
+                                className="w-full bg-[#F7FAFA] border border-[#DDE7E5] rounded-[8px] h-10 px-3 text-sm text-[#102A28] focus:outline-none focus:border-[#7CC7BD] focus:ring-[3px] focus:ring-[#E6F4F2]"
+                            />
                         </div>
-                        <div className="space-y-4">
-                            <div className="space-y-2">
-                                <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Asset Alias</label>
-                                <input
-                                    type="text"
-                                    value={newName}
-                                    onChange={(e) => setNewName(e.target.value)}
-                                    placeholder="e.g. Hero Pattern"
-                                    className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all font-bold"
-                                />
-                            </div>
+
+                        <div>
+                            <ImageUpload
+                                label="Upload image"
+                                helperText="Upload to ImgBB to auto-fill asset URL"
+                                compact={true}
+                                currentImage={newImage || newUrl}
+                                onImageUploaded={(url) => {
+                                    setNewUrl(url);
+                                    setNewImage(url);
+                                }}
+                                onImageRemoved={() => {
+                                    setNewUrl('');
+                                    setNewImage('');
+                                }}
+                            />
                         </div>
-                        <div className="space-y-2">
-                            <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Destination URL</label>
+
+                        <div>
+                            <label className="block text-xs font-medium text-[#4B5F5C] mb-1.5">Or direct URL</label>
                             <input
                                 type="text"
                                 value={newUrl}
-                                onChange={(e) => setNewUrl(e.target.value)}
+                                onChange={(e) => {
+                                    setNewUrl(e.target.value);
+                                    if (!newImage) setNewImage(e.target.value);
+                                }}
                                 placeholder="https://..."
-                                className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all font-bold"
+                                className="w-full bg-[#F7FAFA] border border-[#DDE7E5] rounded-[8px] h-10 px-3 text-sm text-[#102A28] focus:outline-none focus:border-[#7CC7BD] focus:ring-[3px] focus:ring-[#E6F4F2]"
                             />
                         </div>
-                        <div className="space-y-2">
-                            <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Preview Image URL</label>
-                            <input
-                                type="text"
-                                value={newImage}
-                                onChange={(e) => setNewImage(e.target.value)}
-                                placeholder="https://... (Optional)"
-                                className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all font-bold"
-                            />
-                        </div>
+
                         <button
+                            type="button"
                             onClick={handleAdd}
-                            className="w-full py-4 bg-orange-500/10 hover:bg-orange-500 text-orange-500 hover:text-white rounded-2xl font-black uppercase text-[10px] tracking-widest border border-orange-500/20 transition-all"
+                            className="btn-secondary w-full"
                         >
-                            Register Asset
+                            <Plus size={15} />
+                            <span>Add to list</span>
                         </button>
                     </div>
                 </div>
-            </div>
 
-            {/* Assets Grid */}
-            <div className="lg:col-span-3">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <AnimatePresence>
+                {/* Assets Grid */}
+                <div className="lg:col-span-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                         {assets.map((asset) => (
-                            <motion.div
-                                layout
-                                initial={{ opacity: 0, scale: 0.9 }}
-                                animate={{ opacity: 1, scale: 1 }}
-                                exit={{ opacity: 0, scale: 0.9 }}
+                            <div
                                 key={asset.id}
-                                className="bg-[#111111] p-6 rounded-[32px] border border-white/5 group hover:border-orange-500/30 transition-all"
+                                className="bg-white p-4 rounded-[12px] border border-[#DDE7E5] shadow-sm flex flex-col justify-between"
                             >
-                                <div className="aspect-video bg-white/5 rounded-2xl mb-4 overflow-hidden relative border border-white/5">
-                                    {(asset.image || asset.url.match(/\.(jpeg|jpg|gif|png|webp|svg)$/)) ? (
-                                        <img src={asset.image || asset.url} alt={asset.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-                                    ) : (
-                                        <div className="flex items-center justify-center h-full text-gray-700">
-                                            <ImageIcon size={48} />
-                                        </div>
-                                    )}
-                                    <div className="absolute top-2 right-2">
+                                <div>
+                                    <div className="aspect-video bg-[#EEF4F3] rounded-[8px] mb-3 overflow-hidden relative border border-[#DDE7E5]">
+                                        {(asset.image || asset.url?.match(/\.(jpeg|jpg|gif|png|webp|svg)$/)) ? (
+                                            <img
+                                                src={asset.image?.trim() || asset.url?.trim() || null}
+                                                alt={asset.name}
+                                                onError={(e) => { e.currentTarget.src = '/uday-portrait.png'; }}
+                                                className="w-full h-full object-cover"
+                                            />
+                                        ) : (
+                                            <div className="flex items-center justify-center h-full text-[#8A9B98]">
+                                                <ImageIcon size={32} />
+                                            </div>
+                                        )}
                                         <button
+                                            type="button"
                                             onClick={() => handleDelete(asset.id)}
-                                            className="p-3 bg-black/60 text-red-400 rounded-xl backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all"
+                                            className="absolute top-2 right-2 p-1.5 bg-white/90 text-[#DC2626] hover:bg-[#FEF2F2] rounded-[6px] border border-[#DDE7E5] transition-colors"
                                         >
-                                            <Trash2 size={16} />
+                                            <Trash2 size={13} />
                                         </button>
                                     </div>
+                                    <h4 className="font-medium text-[#102A28] text-sm mb-1 line-clamp-1">{asset.name}</h4>
+                                    <p className="text-xs text-[#8A9B98] truncate">
+                                        {asset.url}
+                                    </p>
                                 </div>
-                                <h4 className="font-bold text-white text-sm mb-1 line-clamp-1">{asset.name}</h4>
-                                <p className="text-[10px] font-black text-orange-500 uppercase tracking-tighter truncate opacity-60 group-hover:opacity-100 transition-opacity">
-                                    {asset.url}
-                                </p>
-                            </motion.div>
+                            </div>
                         ))}
-                    </AnimatePresence>
-                </div>
-                {assets.length === 0 && (
-                    <div className="py-40 bg-white/5 rounded-[48px] border border-dashed border-white/10 flex flex-col items-center justify-center text-center">
-                        <Folder size={64} className="text-gray-800 mb-6" />
-                        <h3 className="text-2xl font-black text-white uppercase tracking-widest mb-2">Vault Empty</h3>
-                        <p className="text-gray-500 font-bold text-xs uppercase tracking-widest">No assets registered in the cloud node.</p>
                     </div>
-                )}
+
+                    {assets.length === 0 && (
+                        <div className="py-24 bg-white rounded-[12px] border border-[#DDE7E5] flex flex-col items-center justify-center text-center p-6">
+                            <Folder size={36} className="text-[#8A9B98] mb-3" />
+                            <h3 className="text-base font-semibold text-[#102A28] mb-1">No assets</h3>
+                            <p className="text-xs text-[#8A9B98]">Upload images or add links using the panel on the left.</p>
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );

@@ -153,10 +153,10 @@ const ProjectComments = ({ projectId }) => {
                     {!isReply && (
                         <button
                             onClick={() => setReplyTo(comment.id)}
-                            className="flex items-center gap-2 px-3 py-1.5 bg-white/5 hover:bg-blue-500/20 rounded-lg transition-all group"
+                            className="flex items-center gap-2 px-3 py-1.5 bg-white/5 hover:bg-[#EEF4F3] rounded-lg transition-all group"
                         >
-                            <Reply size={14} className="text-gray-400 group-hover:text-blue-400" />
-                            <span className="text-xs font-bold text-gray-400 group-hover:text-blue-400">
+                            <Reply size={14} className="text-gray-400 group-hover:text-[#8A9B98]" />
+                            <span className="text-xs font-bold text-gray-400 group-hover:text-[#8A9B98]">
                                 Reply
                             </span>
                         </button>
@@ -185,13 +185,13 @@ const ProjectComments = ({ projectId }) => {
             {/* Header */}
             <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-3">
-                    <MessageSquare size={24} className="text-blue-500" />
+                    <MessageSquare size={24} className="text-[#4B5F5C]" />
                     <h3 className="text-2xl font-black text-white uppercase tracking-wider">
                         Comments
                     </h3>
                 </div>
-                <div className="px-4 py-2 bg-blue-500/20 border border-blue-500/30 rounded-full">
-                    <span className="text-sm font-bold text-blue-400">
+                <div className="px-4 py-2 bg-[#EEF4F3] border border-[#DDE7E5] rounded-full">
+                    <span className="text-sm font-bold text-[#8A9B98]">
                         {comments.length} {comments.length === 1 ? 'comment' : 'comments'}
                     </span>
                 </div>
@@ -220,8 +220,8 @@ const ProjectComments = ({ projectId }) => {
             {/* Comment Input */}
             <div className="mb-8">
                 {replyTo && (
-                    <div className="mb-3 p-3 bg-blue-500/10 border border-blue-500/20 rounded-xl flex items-center justify-between">
-                        <span className="text-sm text-blue-400 font-medium">
+                    <div className="mb-3 p-3 bg-[#EEF4F3] border border-[#DDE7E5] rounded-xl flex items-center justify-between">
+                        <span className="text-sm text-[#8A9B98] font-medium">
                             Replying to {comments.find(c => c.id === replyTo)?.author}
                         </span>
                         <button
@@ -238,12 +238,12 @@ const ProjectComments = ({ projectId }) => {
                         onChange={(e) => setNewComment(e.target.value)}
                         placeholder={replyTo ? "Write a reply..." : "Write a comment..."}
                         rows={3}
-                        className="flex-1 px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-blue-500/50 focus:bg-white/10 transition-all resize-none"
+                        className="flex-1 px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:text-[#4B5F5C]/50 focus:bg-white/10 transition-all resize-none"
                     />
                     <button
                         onClick={addComment}
                         disabled={!newComment.trim()}
-                        className="px-6 py-3 bg-gradient-to-r from-blue-500 to-blue-600 text-white rounded-2xl font-bold flex items-center gap-2 hover:shadow-xl hover:shadow-blue-500/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed self-end"
+                        className="px-6 py-3 bg-gradient-to-r text-[#4B5F5C] text-[#4B5F5C] text-white rounded-2xl font-bold flex items-center gap-2 hover:shadow-xl hover:bg-[#EEF4F3] transition-all disabled:opacity-50 disabled:cursor-not-allowed self-end"
                     >
                         <Send size={18} />
                         <span>Post</span>

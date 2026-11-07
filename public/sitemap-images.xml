@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <!-- Homepage – Hero portrait photo -->
+  <url>
+    <loc>https://udaykiranportfolio.web.app/</loc>
+    <lastmod>2026-09-17</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <image:image>
+      <image:loc>https://udaykiranportfolio.web.app/uday-portrait.png</image:loc>
+      <image:title>Uday Kiran Vempati – RPA Club Designer and Web Administrator</image:title>
+      <image:caption>Official portrait photo of Uday Kiran Vempati, RPA Club Designer, Web Administrator, and Provision Wing Lead at KL University, Andhra Pradesh, India</image:caption>
+      <image:geo_location>Andhra Pradesh, India</image:geo_location>
+    </image:image>
+  </url>
+
+  <!-- Honors page – certificates are dynamically discovered via JSON-LD -->
+  <url>
+    <loc>https://udaykiranportfolio.web.app/honors</loc>
+    <lastmod>2026-09-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!-- Blog page -->
+  <url>
+    <loc>https://udaykiranportfolio.web.app/blog</loc>
+    <lastmod>2026-09-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://udaykiranportfolio.web.app/uday-portrait.png</image:loc>
+      <image:title>Blog | Uday Kiran Vempati – Tech Insights &amp; Stories</image:title>
+      <image:caption>Official tech articles and developer insights by Uday Kiran Vempati</image:caption>
+    </image:image>
+  </url>
+
+</urlset>

@@ -49,8 +49,10 @@ const ParticleBackground = () => {
         resizeCanvas();
 
         let particles = [];
-        const particleCount = 60; // Slightly fewer particles for cleaner look
-        const connectionDistance = 150; // Max distance to draw line
+        const isMobile = window.innerWidth < 768;
+        const particleCount = isMobile ? 25 : 45;
+        const connectionDistance = 140;
+        const maxDistSq = connectionDistance * connectionDistance;
 
         const init = () => {
             particles = [];
@@ -68,14 +70,15 @@ const ParticleBackground = () => {
                 particles[i].draw(ctx);
 
                 // Draw connections
-                for (let j = i; j < particles.length; j++) {
+                for (let j = i + 1; j < particles.length; j++) {
                     const dx = particles[i].x - particles[j].x;
                     const dy = particles[i].y - particles[j].y;
-                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    const distSq = dx * dx + dy * dy;
 
-                    if (distance < connectionDistance) {
+                    if (distSq < maxDistSq) {
+                        const distance = Math.sqrt(distSq);
                         ctx.beginPath();
-                        ctx.strokeStyle = `rgba(255, 255, 255, ${1 - distance / connectionDistance * 0.9})`; // Fade out with distance
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${1 - (distance / connectionDistance) * 0.9})`;
                         ctx.lineWidth = 0.5;
                         ctx.moveTo(particles[i].x, particles[i].y);
                         ctx.lineTo(particles[j].x, particles[j].y);

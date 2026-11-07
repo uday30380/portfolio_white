@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
+﻿import React from 'react';
+import { motion } from 'framer-motion';
 import { Trophy, Award, Star } from 'lucide-react';
 
 const ProjectAwards = ({ awards }) => {
@@ -41,3 +41,4 @@ const ProjectAwards = ({ awards }) => {
 };
 
 export default ProjectAwards;
+

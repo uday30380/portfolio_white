@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { db } from '../../firebase';
 import { collection, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc } from 'firebase/firestore';
-import { Mail, Trash2, CheckCircle, Clock, Search, MessageSquare, Filter, ArrowRight } from 'lucide-react';
-import { motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
+import { Mail, Trash2, CheckCircle, Clock, MessageSquare, ArrowRight } from 'lucide-react';
 
 const AdminMessages = () => {
     const [messages, setMessages] = useState([]);
@@ -12,7 +11,7 @@ const AdminMessages = () => {
     useEffect(() => {
         const q = query(collection(db, 'messages'), orderBy('createdAt', 'desc'));
         const unsubscribe = onSnapshot(q, (snapshot) => {
-            const msgs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            const msgs = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
             setMessages(msgs);
             setLoading(false);
         });
@@ -24,7 +23,7 @@ const AdminMessages = () => {
     };
 
     const deleteMessage = async (id) => {
-        if (window.confirm('Erase this message transcript?')) {
+        if (window.confirm('Delete this message?')) {
             await deleteDoc(doc(db, 'messages', id));
         }
     };
@@ -35,110 +34,132 @@ const AdminMessages = () => {
         return true;
     });
 
+    const formatTimestamp = (createdAt) => {
+        if (!createdAt) return 'Recent';
+        if (typeof createdAt.toDate === 'function') {
+            return createdAt.toDate().toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+        }
+        return new Date(createdAt).toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    };
+
     return (
-        <div className="space-y-10 animate-fade-in relative">
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div className="space-y-6 text-[#102A28]">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                 <div>
-                    <div className="flex items-center gap-3 mb-2">
-                        <div className="w-8 h-[2px] bg-orange-500"></div>
-                        <span className="text-[10px] font-black tracking-[0.3em] text-orange-500 uppercase">Communications</span>
-                    </div>
-                    <h2 className="text-3xl font-black text-white">Central Inbox</h2>
+                    <h2 className="text-xl font-semibold text-[#102A28]">Inbox</h2>
+                    <p className="text-xs text-[#8A9B98]">Messages submitted via the contact form</p>
                 </div>
 
-                <div className="flex items-center gap-3 p-2 bg-white/5 rounded-2xl border border-white/5">
+                <div className="flex items-center gap-1.5 p-1 bg-[#EEF4F3] rounded-[8px] border border-[#DDE7E5]">
                     <button
+                        type="button"
                         onClick={() => setFilter('all')}
-                        className={`px - 6 py - 2 rounded - xl text - [10px] font - black uppercase tracking - widest transition - all ${filter === 'all' ? 'bg-orange-500 text-white' : 'text-gray-500 hover:text-white'} `}
+                        className={`px-3 py-1.5 rounded-[6px] text-xs font-medium transition-colors ${
+                            filter === 'all'
+                                ? 'bg-white text-[#102A28] shadow-sm'
+                                : 'text-[#4B5F5C] hover:text-[#0F766E]'
+                        }`}
                     >
-                        Total ({messages.length})
+                        All ({messages.length})
                     </button>
                     <button
+                        type="button"
                         onClick={() => setFilter('unread')}
-                        className={`px - 6 py - 2 rounded - xl text - [10px] font - black uppercase tracking - widest transition - all ${filter === 'unread' ? 'bg-orange-500 text-white' : 'text-gray-500 hover:text-white'} `}
+                        className={`px-3 py-1.5 rounded-[6px] text-xs font-medium transition-colors ${
+                            filter === 'unread'
+                                ? 'bg-white text-[#102A28] shadow-sm'
+                                : 'text-[#4B5F5C] hover:text-[#0F766E]'
+                        }`}
                     >
-                        New ({messages.filter(m => !m.read).length})
+                        Unread ({messages.filter(m => !m.read).length})
                     </button>
                 </div>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-3">
                 {loading ? (
-                    <div className="flex flex-col items-center justify-center py-32 space-y-4">
-                        <div className="w-12 h-12 border-4 border-orange-500/20 border-t-orange-500 rounded-full animate-spin"></div>
-                        <p className="text-[10px] font-black text-gray-500 uppercase tracking-widest">Scanning Network...</p>
+                    <div className="flex flex-col items-center justify-center py-20 space-y-2">
+                        <div className="w-6 h-6 border-2 border-[#DDE7E5] border-t-[#0F766E] rounded-full animate-spin" />
+                        <p className="text-xs text-[#8A9B98]">Loading messages...</p>
                     </div>
                 ) : filteredMessages.length > 0 ? (
-                    <div className="grid gap-4">
-                        {filteredMessages.map((msg) => (
-                            <motion.div
-                                layout
-                                key={msg.id}
-                                className={`group p - 8 rounded - [32px] border transition - all duration - 300 ${msg.read ? 'bg-white/5 border-white/5' : 'bg-orange-500/5 border-orange-500/20 shadow-xl shadow-orange-500/5'} `}
-                            >
-                                <div className="flex flex-col lg:flex-row justify-between gap-8">
-                                    <div className="flex-1 space-y-6">
-                                        <div className="flex items-center gap-4">
-                                            <div className={`w - 12 h - 12 rounded - 2xl flex items - center justify - center ${msg.read ? 'bg-white/5 text-gray-400' : 'bg-orange-500 text-white shadow-lg'} `}>
-                                                <Mail size={20} />
-                                            </div>
-                                            <div>
-                                                <h4 className="font-black text-white tracking-tight">{msg.name}</h4>
-                                                <p className="text-xs font-bold text-orange-500/60 lowercase">{msg.email}</p>
-                                            </div>
-                                            {!msg.read && (
-                                                <span className="ml-4 px-2 py-0.5 bg-orange-500 text-[8px] font-black text-white uppercase rounded tracking-widest animate-pulse">New</span>
-                                            )}
+                    filteredMessages.map((msg) => (
+                        <div
+                            key={msg.id}
+                            className={`p-5 rounded-[12px] border transition-colors ${
+                                msg.read
+                                    ? 'bg-white border-[#DDE7E5]'
+                                    : 'bg-[#EEF4F3]/30 border-[#102A28]'
+                            } shadow-sm`}
+                        >
+                            <div className="flex flex-col md:flex-row justify-between gap-4">
+                                <div className="flex-1 space-y-3">
+                                    <div className="flex items-center gap-3">
+                                        <div className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold ${
+                                            msg.read ? 'bg-[#EEF4F3] text-[#4B5F5C]' : 'bg-[#EEF4F3] text-[#102A28]'
+                                        }`}>
+                                            <Mail size={14} />
                                         </div>
-                                        <div className="bg-black/20 p-6 rounded-2xl border border-white/5">
-                                            <p className="text-sm font-medium text-gray-400 leading-relaxed whitespace-pre-wrap">{msg.message}</p>
+                                        <div>
+                                            <h4 className="font-semibold text-sm text-[#102A28]">{msg.name}</h4>
+                                            <p className="text-xs text-[#4B5F5C]">{msg.email}</p>
                                         </div>
+                                        {!msg.read && (
+                                            <span className="px-2 py-0.5 bg-[#EEF4F3] text-[#102A28] text-[10px] font-medium rounded-full">
+                                                New
+                                            </span>
+                                        )}
                                     </div>
 
-                                    <div className="flex flex-row lg:flex-col justify-between items-end border-t lg:border-t-0 lg:border-l border-white/5 pt-6 lg:pt-0 lg:pl-10 min-w-[180px]">
-                                        <div className="text-right">
-                                            <div className="flex items-center gap-2 text-gray-600 justify-end mb-1">
-                                                <Clock size={14} />
-                                                <span className="text-[10px] font-black uppercase tracking-widest">Received</span>
-                                            </div>
-                                            <div className="text-xs font-bold text-white">
-                                                {msg.createdAt?.toDate().toLocaleDateString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) || 'Unknown'}
-                                            </div>
-                                        </div>
-
-                                        <div className="flex gap-2">
-                                            <button
-                                                onClick={() => toggleRead(msg.id, msg.read)}
-                                                className={`p - 4 rounded - xl transition - all ${msg.read ? 'bg-white/5 text-gray-500 hover:bg-orange-500/20 hover:text-orange-500' : 'bg-orange-500 text-white shadow-lg shadow-orange-500/20 hover:scale-110'} `}
-                                                title={msg.read ? "Mark as Unread" : "Mark as Read"}
-                                            >
-                                                <CheckCircle size={18} />
-                                            </button>
-                                            <a
-                                                href={`mailto:${msg.email}?subject = Re: Your Message to Uday Kiran`}
-                                                className="p-4 bg-white/5 text-gray-500 hover:bg-white hover:text-black rounded-xl transition-all"
-                                                title="Reply Email"
-                                            >
-                                                <ArrowRight size={18} />
-                                            </a>
-                                            <button
-                                                onClick={() => deleteMessage(msg.id)}
-                                                className="p-4 bg-white/5 text-gray-500 hover:bg-red-500 hover:text-white rounded-xl transition-all"
-                                                title="Delete Message"
-                                            >
-                                                <Trash2 size={18} />
-                                            </button>
-                                        </div>
+                                    <div className="bg-[#F7FAFA] p-3.5 rounded-[8px] border border-[#DDE7E5]">
+                                        <p className="text-sm text-[#102A28] leading-relaxed whitespace-pre-wrap">{msg.message}</p>
                                     </div>
                                 </div>
-                            </motion.div>
-                        ))}
-                    </div>
+
+                                <div className="flex md:flex-col justify-between items-end border-t md:border-t-0 md:border-l border-[#DDE7E5] pt-3 md:pt-0 md:pl-6 min-w-[150px] gap-3">
+                                    <div className="text-right text-xs text-[#8A9B98] flex items-center gap-1.5">
+                                        <Clock size={12} />
+                                        <span>{formatTimestamp(msg.createdAt)}</span>
+                                    </div>
+
+                                    <div className="flex gap-1.5">
+                                        <button
+                                            type="button"
+                                            onClick={() => toggleRead(msg.id, msg.read)}
+                                            className={`p-2 rounded-[6px] border text-xs font-medium transition-colors ${
+                                                msg.read
+                                                    ? 'bg-white border-[#DDE7E5] text-[#4B5F5C] hover:bg-[#EEF4F3]'
+                                                    : 'bg-[#EEF4F3] border-[#102A28] text-[#102A28]'
+                                            }`}
+                                            title={msg.read ? "Mark as unread" : "Mark as read"}
+                                        >
+                                            <CheckCircle size={15} />
+                                        </button>
+                                        <a
+                                            href={`mailto:${msg.email}?subject=Re: Your Message to Uday Kiran`}
+                                            className="p-2 bg-white border border-[#DDE7E5] text-[#4B5F5C] hover:text-[#0F766E] hover:bg-[#EEF4F3] rounded-[6px] transition-colors"
+                                            title="Reply via email"
+                                        >
+                                            <ArrowRight size={15} />
+                                        </a>
+                                        <button
+                                            type="button"
+                                            onClick={() => deleteMessage(msg.id)}
+                                            className="p-2 bg-white border border-[#DDE7E5] text-[#DC2626] hover:bg-[#FEF2F2] rounded-[6px] transition-colors"
+                                            title="Delete message"
+                                        >
+                                            <Trash2 size={15} />
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ))
                 ) : (
-                    <div className="flex flex-col items-center justify-center py-40 bg-white/5 rounded-[48px] border border-dashed border-white/10 text-center">
-                        <MessageSquare size={64} className="text-gray-800 mb-6" />
-                        <h3 className="text-2xl font-black text-white uppercase tracking-widest mb-2">Inbox Empty</h3>
-                        <p className="text-gray-500 font-bold text-xs uppercase tracking-widest">Frequency scanning for new signals...</p>
+                    <div className="flex flex-col items-center justify-center py-20 bg-white rounded-[12px] border border-[#DDE7E5] text-center p-6">
+                        <MessageSquare size={36} className="text-[#8A9B98] mb-3" />
+                        <h3 className="text-base font-semibold text-[#102A28] mb-1">No messages</h3>
+                        <p className="text-xs text-[#8A9B98]">No inquiries in this filter</p>
                     </div>
                 )}
             </div>

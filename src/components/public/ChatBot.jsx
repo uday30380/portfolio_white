@@ -1,10 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageSquare, X, Send, Bot, User } from 'lucide-react';
 import { useData } from '../../context/DataContext';
-import { AnimatePresence, motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
+import { AnimatePresence, motion } from 'framer-motion';
 
 const ChatBot = () => {
-    const { data } = useData();
+    const { data } = useData() || {};
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState([
         { id: 1, text: "Hi! I'm Uday's AI Assistant. Ask me anything about his skills, projects, or experience!", sender: 'bot' }
@@ -26,7 +26,9 @@ const ChatBot = () => {
         const lowerQuery = query.toLowerCase();
 
         if (lowerQuery.includes('contact') || lowerQuery.includes('email') || lowerQuery.includes('hire')) {
-            return `You can reach Uday at ${data.contact.email} or call ${data.contact.phone}.`;
+            const email = data?.contact?.email || 'vempatiudaykiran04@gmail.com';
+            const phone = data?.contact?.phone || '+91 9390234033';
+            return `You can reach Uday at ${email} or call ${phone}.`;
         }
         if (lowerQuery.includes('skill') || lowerQuery.includes('stack') || lowerQuery.includes('technologies')) {
             const topSkills = data.skills?.slice(0, 5).map(s => s.skill).join(', ') || "React, Node.js";
@@ -153,3 +155,4 @@ const ChatBot = () => {
 };
 
 export default ChatBot;
+

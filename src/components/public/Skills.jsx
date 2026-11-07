@@ -1,123 +1,81 @@
-import React, { useState } from 'react';
-import { useData } from '../../context/DataContext';
-import { Code, Database, Palette, Circle, Zap } from 'lucide-react';
-import { motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
+import React from 'react';
+
+const skillGroups = [
+    {
+        title: 'Frontend',
+        skills: [
+            'React',
+            'JavaScript (ES6+)',
+            'Tailwind CSS',
+            'HTML5 & Modern CSS',
+            'Responsive web design',
+            'State management',
+            'Component architecture'
+        ]
+    },
+    {
+        title: 'Backend and Cloud',
+        skills: [
+            'Java (OOP & Multithreading)',
+            'Firebase (Firestore, Auth, Storage)',
+            'REST APIs',
+            'Node.js basics',
+            'SQL & database design',
+            'Git & GitHub version control',
+            'Web deployment & hosting'
+        ]
+    },
+    {
+        title: 'Design',
+        skills: [
+            'Figma',
+            'Canva (Certified)',
+            'UI/UX wireframing & prototyping',
+            'Visual identity & branding',
+            'Design systems',
+            'Typography & layout',
+            'Creative direction'
+        ]
+    }
+];
 
 const Skills = () => {
-    const { data } = useData();
-    const [hoveredSkill, setHoveredSkill] = useState(null);
-
-    const getIcon = (iconName) => {
-        switch (iconName) {
-            case 'Code': return <Code size={32} />;
-            case 'Database': return <Database size={32} />;
-            case 'Palette': return <Palette size={32} />;
-            default: return <Circle size={32} />;
-        }
-    };
-
-    const container = {
-        hidden: { opacity: 0 },
-        show: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.1
-            }
-        }
-    };
-
-    const item = {
-        hidden: { opacity: 0, y: 30 },
-        show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 50 } }
-    };
-
     return (
-        <section id="skills" className="py-32 bg-[#080808] relative overflow-hidden">
-            {/* Background Effects */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-orange-500/5 rounded-full blur-[150px] pointer-events-none"></div>
+        <section id="skills" className="py-16 md:py-24 bg-[#EEF4F3] border-t border-[#DDE7E5]">
+            <div className="max-w-[1100px] mx-auto px-6">
+                <div className="mb-12">
+                    <h2 className="text-2xl md:text-3xl font-semibold text-[#102A28] mb-3">
+                        Skills & capabilities
+                    </h2>
+                    <p className="text-base text-[#4B5F5C] max-w-[620px]">
+                        The languages, frameworks, and creative tools I work with daily across software engineering and product design.
+                    </p>
+                </div>
 
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8"
-                >
-                    <div className="max-w-2xl">
-                        <div className="flex items-center gap-3 mb-6">
-                            <div className="w-10 h-[2px] bg-orange-500"></div>
-                            <span className="text-sm font-bold tracking-[0.2em] text-orange-500 uppercase">MY SKILLS</span>
-                        </div>
-                        <h2 className="text-4xl md:text-6xl font-black text-white leading-tight">
-                            Technical <span className="text-orange-500">Mastery</span>
-                        </h2>
-                    </div>
-                </motion.div>
-
-                <motion.div
-                    variants={container}
-                    initial="hidden"
-                    whileInView="show"
-                    viewport={{ once: true, margin: "-50px" }}
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-                >
-                    {(data?.skills || []).map((skill) => (
-                        <motion.div
-                            variants={item}
-                            key={skill.id}
-                            className="h-[320px] w-full [perspective:1000px] group"
-                            onMouseEnter={() => setHoveredSkill(skill.id)}
-                            onMouseLeave={() => setHoveredSkill(null)}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+                    {skillGroups.map((group) => (
+                        <div
+                            key={group.title}
+                            className="bg-[#FFFFFF] border border-[#DDE7E5] rounded-xl p-6 shadow-sm hover:border-[#7CC7BD] hover:-translate-y-0.5 transition-all duration-200"
                         >
-                            <motion.div
-                                className="relative w-full h-full transition-all duration-700 [transform-style:preserve-3d]"
-                                style={{
-                                    transform: hoveredSkill === skill.id ? "rotateY(180deg)" : "rotateY(0deg)",
-                                }}
-                            >
-                                {/* Front Face */}
-                                <div className="absolute inset-0 w-full h-full bg-[#0A0A0A] rounded-[40px] border border-white/5 p-10 flex flex-col items-center justify-center text-center [backface-visibility:hidden] shadow-2xl">
-                                    <div className="w-24 h-24 rounded-full bg-white/5 flex items-center justify-center mb-8 group-hover:scale-110 transition-transform duration-500 border border-white/5 group-hover:border-orange-500/50">
-                                        <div className="text-orange-500">
-                                            {getIcon(skill.iconName)}
-                                        </div>
-                                    </div>
-                                    <h3 className="text-3xl font-black text-white uppercase tracking-tight mb-2">{skill.skill}</h3>
-                                    <div className="w-12 h-1 bg-orange-500 rounded-full"></div>
-                                    <p className="mt-6 text-gray-500 text-xs font-bold uppercase tracking-widest">Hover to Reveal Stats</p>
-                                </div>
+                            <h3 className="text-lg font-semibold text-[#102A28] mb-5 pb-3 border-b border-[#DDE7E5]">
+                                {group.title}
+                            </h3>
 
-                                {/* Back Face */}
-                                <div className="absolute inset-0 w-full h-full bg-orange-500 rounded-[40px] p-10 flex flex-col justify-center [backface-visibility:hidden] [transform:rotateY(180deg)] shadow-2xl overflow-hidden relative">
-                                    {/* Decorative texture */}
-                                    <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-
-                                    <div className="relative z-10">
-                                        <div className="flex justify-between items-end mb-4">
-                                            <h3 className="text-2xl font-black text-white uppercase">{skill.skill}</h3>
-                                            <span className="text-4xl font-black text-white/90">{skill.percentage}%</span>
-                                        </div>
-
-                                        <div className="h-4 bg-black/20 rounded-full overflow-hidden mb-8 border border-white/20">
-                                            <motion.div
-                                                initial={{ width: 0 }}
-                                                animate={{ width: hoveredSkill === skill.id ? `${skill.percentage}%` : 0 }}
-                                                transition={{ duration: 0.8, delay: 0.2 }}
-                                                className="h-full bg-white rounded-full"
-                                            ></motion.div>
-                                        </div>
-
-                                        <p className="text-white/90 font-medium leading-relaxed text-sm">
-                                            {skill.description}
-                                        </p>
-                                    </div>
-
-                                    <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
-                                </div>
-                            </motion.div>
-                        </motion.div>
+                            <ul className="space-y-3">
+                                {group.skills.map((skill, index) => (
+                                    <li
+                                        key={index}
+                                        className="text-sm text-[#4B5F5C] flex items-center gap-2.5"
+                                    >
+                                        <span className="w-1.5 h-1.5 rounded-full bg-[#0F766E]" aria-hidden="true" />
+                                        <span>{skill}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     ))}
-                </motion.div>
+                </div>
             </div>
         </section>
     );

@@ -1,161 +1,237 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion'; // eslint-disable-line no-unused-vars
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useMemo } from 'react';
 import { useData } from '../context/DataContext';
-import HonorsToolbar from '../components/honors/HonorsToolbar';
-import HonorsStats from '../components/honors/HonorsStats';
-import CertificateCard from '../components/honors/CertificateCard';
-import Preloader from '../components/public/Preloader';
+import { Search, Award, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import Navbar from '../components/public/Navbar';
+import Footer from '../components/public/Footer';
+import SEO from '../components/public/SEO';
+
+const fallbackList = [
+    {
+        id: 'canva-rec',
+        title: 'Officially Recognized by Canva',
+        issuer: 'Canva',
+        category: 'Design',
+        date: '2025',
+        description: 'Recognized for mastery in visual communications and design leadership.'
+    },
+    {
+        id: 'focus-lead',
+        title: 'Provision Wing Lead – Graphic Design',
+        issuer: 'FOCUS Club, KL University',
+        category: 'Leadership',
+        date: '2025',
+        description: 'Appointed as student lead heading creative direction and campaign branding.'
+    },
+    {
+        id: 'amazon-pub',
+        title: 'Mobile App Publisher',
+        issuer: 'Amazon App Store',
+        category: 'Engineering',
+        date: '2024',
+        description: 'Published an independent mobile software application on the Amazon App Store.'
+    },
+    {
+        id: 'rpa-admin',
+        title: 'RPA Club Web Administrator & Designer',
+        issuer: 'RPA Club, KL University',
+        category: 'Engineering',
+        date: '2024',
+        description: 'Managed complete digital infrastructure and event branding operations.'
+    },
+    {
+        id: 'canva-essentials',
+        title: 'Canva for Work & Design Essentials',
+        issuer: 'Canva Education',
+        category: 'Design',
+        date: '2024',
+        description: 'Verified certification in digital asset generation and brand design systems.'
+    },
+    {
+        id: 'cid-ap',
+        title: 'Crime Investigation Department Portal Commendation',
+        issuer: 'CID Andhra Pradesh',
+        category: 'Engineering',
+        date: '2023',
+        description: 'Engineered a secure role-based access government portal for resource coordination.'
+    }
+];
+
+const categories = ['All', 'Engineering', 'Design', 'Leadership'];
+
 const HonorsPage = () => {
-    const navigate = useNavigate();
-    const { data } = useData();
-    const [loading, setLoading] = useState(true);
+    const { data } = useData() || {};
     const [searchQuery, setSearchQuery] = useState('');
-    const [filter, setFilter] = useState('All');
-    const [sort, setSort] = useState('newest');
-    const [viewMode, setViewMode] = useState('grid');
+    const [activeCategory, setActiveCategory] = useState('All');
 
-    useEffect(() => {
-        // Simulate initial loading
-        setTimeout(() => setLoading(false), 800);
-    }, []);
+    const allItems = useMemo(() => {
+        const raw = [
+            ...(data?.honors || []).map(h => ({
+                id: h.id,
+                title: h.title,
+                issuer: h.issuer || h.organization || 'KL University',
+                category: h.category || 'Engineering',
+                date: h.date || h.year || '2024',
+                image: h.image,
+                description: h.description
+            })),
+            ...(data?.certificates || []).map(c => ({
+                id: `cert-${c.id}`,
+                title: c.title,
+                issuer: c.issuer || c.organization || 'Certification',
+                category: c.category || 'Design',
+                date: c.date || c.year || '2024',
+                image: c.image,
+                description: c.description
+            })),
+            ...(data?.achievements || []).map(a => ({
+                id: a.id,
+                title: a.title,
+                issuer: a.organization || 'Recognition',
+                category: 'Leadership',
+                date: a.date || '2024',
+                image: a.image,
+                description: a.description
+            }))
+        ];
 
-    const filteredHonors = React.useMemo(() => {
-        const honors = data?.honors || [];
-        const certificates = (data?.certificates || []).map(c => ({
-            ...c,
-            id: `cert-${c.id}`, // Avoid ID collisions
-            category: c.category || 'Certification',
-            date: c.date || '2023'
-        }));
+        return raw.length >= 4 ? raw : fallbackList;
+    }, [data]);
 
-        let results = [...honors, ...certificates];
-
-        // 1. Search
-        if (searchQuery) {
-            const lowerQuery = searchQuery.toLowerCase();
-            results = results.filter(h =>
-                h.title.toLowerCase().includes(lowerQuery) ||
-                h.issuer.toLowerCase().includes(lowerQuery) ||
-                h.skills?.some(s => s.toLowerCase().includes(lowerQuery))
-            );
-        }
-
-        // 2. Filter
-        if (filter !== 'All') {
-            results = results.filter(h => h.category === filter);
-        }
-
-        // 3. Sort
-        results.sort((a, b) => {
-            if (sort === 'newest') return new Date(b.date) - new Date(a.date);
-            if (sort === 'oldest') return new Date(a.date) - new Date(b.date);
-            if (sort === 'az') return a.title.localeCompare(b.title);
-            if (sort === 'za') return b.title.localeCompare(a.title);
-            return 0;
+    const filtered = useMemo(() => {
+        return allItems.filter(item => {
+            const matchesCategory = activeCategory === 'All' || item.category === activeCategory;
+            const query = searchQuery.toLowerCase().trim();
+            const matchesQuery = !query ||
+                item.title.toLowerCase().includes(query) ||
+                item.issuer.toLowerCase().includes(query) ||
+                (item.description && item.description.toLowerCase().includes(query));
+            return matchesCategory && matchesQuery;
         });
-
-        return results;
-    }, [data, searchQuery, filter, sort]);
-
-    if (loading) return <Preloader />;
+    }, [allItems, activeCategory, searchQuery]);
 
     return (
-        <div className="min-h-screen bg-black text-white pt-24 pb-20">
-            {/* Dynamic Background */}
-            <div className="fixed inset-0 z-0 pointer-events-none">
-                <div className="absolute top-0 right-0 w-[50%] h-[50%] bg-orange-500/5 rounded-full blur-[120px]" />
-                <div className="absolute bottom-0 left-0 w-[40%] h-[40%] bg-blue-500/5 rounded-full blur-[120px]" />
-            </div>
-            {/* Back Button */}
-            <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                className="fixed top-24 left-4 md:left-8 z-50"
-            >
-                <button
-                    onClick={() => navigate('/')}
-                    className="flex items-center gap-2 px-6 py-3 bg-black/80 backdrop-blur-xl hover:bg-orange-500 text-white rounded-full transition-all border border-white/10 font-bold shadow-xl group"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:-translate-x-1 transition-transform"><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></svg>
-                    <span className="hidden md:inline">Back to Home</span>
-                </button>
-            </motion.div>
+        <div className="min-h-screen bg-[#F7FAFA] text-[#102A28] flex flex-col justify-between">
+            <SEO
+                title="Honors and Certifications · Uday Kiran Vempati"
+                description="Browse professional credentials, honors, and verified design certifications earned by Uday Kiran Vempati."
+            />
+            <Navbar />
 
-            <div className="container mx-auto px-6 relative z-10">
-                <div className="text-center mb-16">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="flex items-center justify-center gap-3 mb-4"
+            <main className="py-12 md:py-20 flex-1">
+                <div className="max-w-[1100px] mx-auto px-6">
+                    {/* Back Link */}
+                    <Link
+                        to="/"
+                        className="inline-flex items-center gap-1.5 text-sm text-[#4B5F5C] hover:text-[#0F766E] font-medium mb-8 transition-colors"
                     >
-                        <div className="w-12 h-[2px] bg-orange-500"></div>
-                        <h1 className="text-sm font-black text-orange-500 uppercase tracking-[0.3em]">Recognition</h1>
-                        <div className="w-12 h-[2px] bg-orange-500"></div>
-                    </motion.div>
-                    <motion.h2
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1 }}
-                        className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black text-white mb-6 uppercase tracking-wider relative inline-block"
-                    >
-                        Honors & <span className="text-orange-500">Awards</span>
-                        <div className="hidden lg:block absolute -top-10 -right-12 w-20 h-20 bg-orange-500 rounded-full blur-2xl opacity-20 animate-pulse"></div>
-                    </motion.h2>
-                    <motion.p
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.2 }}
-                        className="text-gray-400 max-w-2xl mx-auto font-medium"
-                    >
-                        A curated collection of global hackathon wins, technical certifications, and industry recognitions validating my expertise.
-                    </motion.p>
-                </div>
+                        <ArrowLeft size={16} />
+                        <span>Back to home</span>
+                    </Link>
 
-                <HonorsStats
-                    honors={[...(data?.honors || []), ...(data?.certificates || [])]}
-                    validatedSkills={Array.from(new Set([...(data?.honors || []), ...(data?.certificates || [])].flatMap(h => h.skills || [])))}
-                />
-
-                <HonorsToolbar
-                    searchQuery={searchQuery}
-                    setSearchQuery={setSearchQuery}
-                    filter={filter}
-                    setFilter={setFilter}
-                    sort={sort}
-                    setSort={setSort}
-                    viewMode={viewMode}
-                    setViewMode={setViewMode}
-                />
-
-                {/* Results Grid */}
-                {filteredHonors.length > 0 ? (
-                    <motion.div
-                        layout
-                        className={`grid gap-4 sm:gap-6 ${viewMode === 'grid' ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' : 'grid-cols-1'}`}
-                    >
-                        <AnimatePresence>
-                            {filteredHonors.map((cert, index) => (
-                                <CertificateCard
-                                    key={cert.id}
-                                    certificate={cert}
-                                    index={index}
-                                />
-                            ))}
-                        </AnimatePresence>
-                    </motion.div>
-                ) : (
-                    <div className="text-center py-20 bg-white/5 rounded-[40px] border border-dashed border-white/10">
-                        <p className="text-gray-500 font-bold uppercase tracking-widest text-sm">No recognition found matching your criteria</p>
-                        <button
-                            onClick={() => { setSearchQuery(''); setFilter('All'); }}
-                            className="mt-4 text-orange-500 text-xs font-black uppercase tracking-widest hover:underline"
-                        >
-                            Reset Filters
-                        </button>
+                    {/* Header */}
+                    <div className="mb-10">
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-[#102A28] tracking-tight mb-3">
+                            Honors and certifications
+                        </h1>
+                        <p className="text-base text-[#4B5F5C] max-w-[620px]">
+                            Verified credentials, academic achievements, and industry recognitions in software engineering and design.
+                        </p>
                     </div>
-                )}
-            </div>
+
+                    {/* Simple Search Box */}
+                    <div className="relative mb-6 max-w-md">
+                        <Search
+                            size={18}
+                            className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8A9B98] pointer-events-none"
+                        />
+                        <input
+                            type="text"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            placeholder="Search by title or organization..."
+                            className="w-full h-11 pl-10 pr-4 rounded-lg border border-[#DDE7E5] bg-[#FFFFFF] text-sm text-[#102A28] placeholder:text-[#8A9B98] focus:outline-none focus:border-[#7CC7BD] focus:ring-[3px] focus:ring-[#E6F4F2] transition-colors"
+                        />
+                    </div>
+
+                    {/* One Filter Row of Chips */}
+                    <div className="flex flex-wrap gap-2 mb-10">
+                        {categories.map((cat) => {
+                            const isSelected = activeCategory === cat;
+                            return (
+                                <button
+                                    key={cat}
+                                    type="button"
+                                    onClick={() => setActiveCategory(cat)}
+                                    className={`h-9 px-4 rounded-lg text-sm font-medium transition-colors border ${
+                                        isSelected
+                                            ? 'bg-[#0F766E] text-white border-[#0F766E]'
+                                            : 'bg-[#E6F4F2] text-[#0F766E] border-[#DDE7E5] hover:border-[#7CC7BD]'
+                                    }`}
+                                >
+                                    {cat}
+                                </button>
+                            );
+                        })}
+                    </div>
+
+                    {/* Grid of Clean Cards */}
+                    {filtered.length === 0 ? (
+                        <div className="p-12 text-center rounded-xl border border-[#DDE7E5] bg-[#FFFFFF]">
+                            <p className="text-base text-[#4B5F5C]">
+                                No credentials match your search.
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                            {filtered.map((item) => (
+                                <div
+                                    key={item.id}
+                                    className="bg-[#FFFFFF] border border-[#DDE7E5] rounded-xl p-6 shadow-sm flex flex-col justify-between transition-all duration-200 hover:border-[#7CC7BD] hover:-translate-y-0.5"
+                                >
+                                    <div>
+                                        <div className="flex items-center justify-between mb-4">
+                                            <div className="w-8 h-8 rounded-lg bg-[#E6F4F2] text-[#0F766E] flex items-center justify-center">
+                                                <Award size={16} />
+                                            </div>
+                                            <span className="text-xs font-medium text-[#8A9B98]">
+                                                {item.date}
+                                            </span>
+                                        </div>
+
+                                        <h2 className="text-lg font-semibold text-[#102A28] mb-1.5 line-clamp-2">
+                                            {item.title}
+                                        </h2>
+                                        <p className="text-sm font-medium text-[#4B5F5C] mb-3">
+                                            {item.issuer}
+                                        </p>
+                                        {item.description && (
+                                            <p className="text-sm text-[#8A9B98] leading-relaxed line-clamp-3">
+                                                {item.description}
+                                            </p>
+                                        )}
+                                    </div>
+
+                                    <div className="mt-5 pt-4 border-t border-[#DDE7E5] flex items-center justify-between">
+                                        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-[#E6F4F2] text-[#0F766E]">
+                                            {item.category}
+                                        </span>
+                                        <Link
+                                            to={`/certificate/${item.id}`}
+                                            className="link-accent text-xs inline-flex items-center gap-1"
+                                        >
+                                            <span>View credential</span>
+                                            <ArrowRight size={13} />
+                                        </Link>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+            </main>
+
+            <Footer />
         </div>
     );
 };

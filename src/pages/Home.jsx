@@ -1,16 +1,15 @@
 import React, { useEffect } from 'react';
 import Navbar from '../components/public/Navbar';
 import Hero from '../components/public/Hero';
+import Projects from '../components/public/Projects';
 import About from '../components/public/About';
 import Skills from '../components/public/Skills';
-import Projects from '../components/public/Projects';
 import Certificates from '../components/public/Certificates';
-import Achievements from '../components/public/Achievements';
+import Testimonials from '../components/public/Testimonials';
 import Contact from '../components/public/Contact';
 import Footer from '../components/public/Footer';
 import ScrollReveal from '../components/public/ScrollReveal';
-import PageWrapper from '../components/public/PageWrapper';
-import Testimonials from '../components/public/Testimonials';
+import SEO from '../components/public/SEO';
 import { db } from '../firebase';
 import { doc, updateDoc, increment, getDoc, setDoc } from 'firebase/firestore';
 
@@ -34,7 +33,7 @@ const Home = () => {
                     }
                     sessionStorage.setItem('visited', 'true');
                 } catch (error) {
-                    console.error("Error updating visitor count:", error);
+                    console.warn("Visitor stats unavailable (offline or permission):", error?.message || error);
                 }
             }
         };
@@ -43,20 +42,18 @@ const Home = () => {
     }, []);
 
     return (
-        <PageWrapper>
-            <div className="bg-dark min-h-screen">
-                <Navbar />
-                <Hero />
-                <ScrollReveal><About /></ScrollReveal>
-                <ScrollReveal><Skills /></ScrollReveal>
-                <ScrollReveal><Projects /></ScrollReveal>
-                <ScrollReveal><Certificates /></ScrollReveal>
-                <ScrollReveal><Achievements /></ScrollReveal>
-                <ScrollReveal><Testimonials /></ScrollReveal>
-                <ScrollReveal><Contact /></ScrollReveal>
-                <ScrollReveal><Footer /></ScrollReveal>
-            </div>
-        </PageWrapper>
+        <main className="min-h-screen bg-[#F7FAFA] text-[#102A28]">
+            <SEO />
+            <Navbar />
+            <Hero />
+            <ScrollReveal><Projects /></ScrollReveal>
+            <ScrollReveal><About /></ScrollReveal>
+            <ScrollReveal><Skills /></ScrollReveal>
+            <ScrollReveal><Certificates /></ScrollReveal>
+            <ScrollReveal><Testimonials /></ScrollReveal>
+            <ScrollReveal><Contact /></ScrollReveal>
+            <Footer />
+        </main>
     );
 };
 

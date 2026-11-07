@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { X, CheckCircle, AlertTriangle, Info, AlertCircle } from 'lucide-react';
-import { AnimatePresence, motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
-
+import { AnimatePresence, motion } from 'framer-motion';
 
 const Toast = ({ message, type = 'success', onClose, duration = 3000 }) => {
     useEffect(() => {
@@ -14,23 +13,23 @@ const Toast = ({ message, type = 'success', onClose, duration = 3000 }) => {
     }, [duration, onClose]);
 
     const variants = {
-        initial: { opacity: 0, y: 50, scale: 0.9 },
+        initial: { opacity: 0, y: 50, scale: 0.95 },
         animate: { opacity: 1, y: 0, scale: 1 },
-        exit: { opacity: 0, y: 20, scale: 0.9, transition: { duration: 0.2 } }
+        exit: { opacity: 0, y: 20, scale: 0.95, transition: { duration: 0.2 } }
     };
 
     const icons = {
-        success: <CheckCircle size={20} className="text-green-500" />,
-        error: <AlertCircle size={20} className="text-red-500" />,
-        info: <Info size={20} className="text-blue-500" />,
-        warning: <AlertTriangle size={20} className="text-yellow-500" />
+        success: <CheckCircle size={20} className="text-[#15803D]" />,
+        error: <AlertCircle size={20} className="text-[#DC2626]" />,
+        info: <Info size={20} className="text-[#0F766E]" />,
+        warning: <AlertTriangle size={20} className="text-[#B45309]" />
     };
 
-    const bgColors = {
-        success: 'bg-green-500/10 border-green-500/20',
-        error: 'bg-red-500/10 border-red-500/20',
-        info: 'bg-blue-500/10 border-blue-500/20',
-        warning: 'bg-yellow-500/10 border-yellow-500/20'
+    const styles = {
+        success: 'bg-white border-[#DDE7E5] text-[#102A28]',
+        error: 'bg-[#FEF2F2] border-[#FCA5A5] text-[#102A28]',
+        info: 'bg-[#E6F4F2] border-[#DDE7E5] text-[#102A28]',
+        warning: 'bg-[#FFFBEB] border-[#FDE68A] text-[#102A28]'
     };
 
     return (
@@ -42,17 +41,17 @@ const Toast = ({ message, type = 'success', onClose, duration = 3000 }) => {
                     animate="animate"
                     exit="exit"
                     variants={variants}
-                    className={`pointer-events-auto flex items-start gap-4 p-4 rounded-xl border backdrop-blur-md shadow-xl max-w-sm w-full ${bgColors[type] || bgColors.success} bg-[#111111]`}
+                    className={`pointer-events-auto flex items-start gap-3 p-4 rounded-xl border shadow-lg max-w-sm w-full ${styles[type] || styles.success}`}
                 >
                     <div className="mt-0.5 shrink-0">
                         {icons[type] || icons.success}
                     </div>
                     <div className="flex-1 pt-0.5">
-                        <p className="text-sm font-semibold text-white leading-snug">{message}</p>
+                        <p className="text-sm font-medium leading-snug">{message}</p>
                     </div>
                     <button
                         onClick={onClose}
-                        className="p-1 hover:bg-white/10 rounded-full transition-colors -mr-2 -mt-2 text-gray-400 hover:text-white"
+                        className="p-1 hover:bg-[#EEF4F3] rounded-full transition-colors -mr-1 -mt-1 text-[#8A9B98] hover:text-[#102A28]"
                         aria-label="Close notification"
                     >
                         <X size={16} />
@@ -64,7 +63,13 @@ const Toast = ({ message, type = 'success', onClose, duration = 3000 }) => {
                             initial={{ width: "100%" }}
                             animate={{ width: "0%" }}
                             transition={{ duration: duration / 1000, ease: "linear" }}
-                            className={`absolute bottom-0 left-4 right-4 h-[2px] rounded-full opacity-50 ${type === 'error' ? 'bg-red-500' : type === 'warning' ? 'bg-yellow-500' : type === 'info' ? 'bg-blue-500' : 'bg-green-500'}`}
+                            className={`absolute bottom-0 left-4 right-4 h-[2px] rounded-full opacity-60 ${
+                                type === 'error'
+                                    ? 'bg-[#DC2626]'
+                                    : type === 'warning'
+                                    ? 'bg-[#B45309]'
+                                    : 'bg-[#0F766E]'
+                            }`}
                         />
                     )}
                 </motion.div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
+import { motion } from 'framer-motion';
 
 const LazyImage = ({
     src,
@@ -52,7 +52,7 @@ const LazyImage = ({
     return (
         <div ref={imgRef} className="relative overflow-hidden">
             <motion.img
-                src={imageSrc}
+                src={imageSrc?.trim() ? imageSrc : null}
                 alt={alt}
                 className={`${className} ${!imageLoaded ? 'blur-sm scale-105' : ''} transition-all duration-700`}
                 initial={{ opacity: 0 }}
@@ -67,3 +67,4 @@ const LazyImage = ({
 };
 
 export default LazyImage;
+

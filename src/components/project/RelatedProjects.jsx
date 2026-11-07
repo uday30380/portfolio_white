@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
+import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useData } from '../../context/DataContext';
 import { Sparkles, ArrowRight } from 'lucide-react';
@@ -38,7 +38,7 @@ const RelatedProjects = ({ currentProjectId, tags = [] }) => {
                     >
                         <div className="relative aspect-video rounded-3xl overflow-hidden border border-white/10 mb-6 transition-all duration-500 group-hover:border-orange-500/50 group-hover:scale-[1.02] shadow-2xl">
                             <img
-                                src={project.image}
+                                src={project.image?.trim() ? project.image : null}
                                 alt={project.title}
                                 className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                             />
@@ -75,3 +75,4 @@ const RelatedProjects = ({ currentProjectId, tags = [] }) => {
 };
 
 export default RelatedProjects;
+

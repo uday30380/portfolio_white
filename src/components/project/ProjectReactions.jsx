@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion'; // eslint-disable-line no-unused-vars
+﻿import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Heart, ThumbsUp, Flame, Zap, PartyPopper, Rocket, Sparkles } from 'lucide-react';
 
 const ProjectReactions = ({ projectId, onReactionChange }) => {
@@ -16,7 +16,7 @@ const ProjectReactions = ({ projectId, onReactionChange }) => {
 
     const reactionTypes = [
         { id: 'heart', icon: Heart, label: 'Love', color: 'text-red-500', bgColor: 'bg-red-500/20', emoji: '❤️' },
-        { id: 'thumbsUp', icon: ThumbsUp, label: 'Like', color: 'text-blue-500', bgColor: 'bg-blue-500/20', emoji: '👍' },
+        { id: 'thumbsUp', icon: ThumbsUp, label: 'Like', color: 'text-[#4B5F5C]', bgColor: 'bg-[#EEF4F3]', emoji: '👍' },
         { id: 'fire', icon: Flame, label: 'Fire', color: 'text-orange-500', bgColor: 'bg-orange-500/20', emoji: '🔥' },
         { id: 'zap', icon: Zap, label: 'Amazing', color: 'text-yellow-500', bgColor: 'bg-yellow-500/20', emoji: '⚡' },
         { id: 'party', icon: PartyPopper, label: 'Celebrate', color: 'text-purple-500', bgColor: 'bg-purple-500/20', emoji: '🎉' },
@@ -201,3 +201,4 @@ const ProjectReactions = ({ projectId, onReactionChange }) => {
 };
 
 export default ProjectReactions;
+

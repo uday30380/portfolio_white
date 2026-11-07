@@ -3,15 +3,24 @@ import React, { useEffect, useRef, useState } from 'react';
 const ScrollReveal = ({
     children,
     className = "",
-    animation = "fade-up", // fade-up, fade-in, zoom-in, slide-right
-    duration = 1000,
-    delay = 0,
-    offset = 50
+    delay = 0
 }) => {
-    const [isVisible, setIsVisible] = useState(false);
+    const [isVisible, setIsVisible] = useState(() => {
+        if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            return true;
+        }
+        return false;
+    });
     const ref = useRef(null);
 
     useEffect(() => {
+        if (typeof window === 'undefined') return;
+
+        // If reduced motion is requested, observer is not needed
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            return;
+        }
+
         const observer = new IntersectionObserver(
             ([entry]) => {
                 if (entry.isIntersecting) {
@@ -21,51 +30,28 @@ const ScrollReveal = ({
             },
             {
                 threshold: 0.05,
-                rootMargin: `0px 0px -${offset}px 0px`
+                rootMargin: '0px 0px -40px 0px'
             }
         );
 
-        const currentRef = ref.current;
-
-        if (currentRef) {
-            observer.observe(currentRef);
-        }
+        const el = ref.current;
+        if (el) observer.observe(el);
 
         return () => {
-            if (currentRef) {
-                observer.unobserve(currentRef);
-            }
+            if (el) observer.unobserve(el);
         };
-    }, [offset]);
-
-    const getAnimationClass = () => {
-        if (!isVisible) {
-            switch (animation) {
-                case 'fade-up': return 'opacity-0 translate-y-20';
-                case 'fade-in': return 'opacity-0';
-                case 'zoom-in': return 'opacity-0 scale-95';
-                case 'slide-right': return 'opacity-0 -translate-x-20';
-                default: return 'opacity-0 translate-y-20';
-            }
-        }
-
-        switch (animation) {
-            case 'fade-up': return 'opacity-100 translate-y-0';
-            case 'fade-in': return 'opacity-100';
-            case 'zoom-in': return 'opacity-100 scale-100';
-            case 'slide-right': return 'opacity-100 translate-x-0';
-            default: return 'opacity-100 translate-y-0';
-        }
-    };
+    }, []);
 
     return (
         <div
             ref={ref}
-            className={`transition-all ease-out transform ${getAnimationClass()} ${className}`}
             style={{
-                transitionDuration: `${duration}ms`,
+                transitionDuration: '200ms',
                 transitionDelay: `${delay}ms`
             }}
+            className={`transition-opacity ease-out ${
+                isVisible ? 'opacity-100' : 'opacity-0'
+            } ${className}`}
         >
             {children}
         </div>

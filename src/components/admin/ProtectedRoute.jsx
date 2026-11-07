@@ -3,6 +3,7 @@ import { Navigate } from 'react-router-dom';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../../firebase';
 import { ADMIN_EMAILS } from '../../config/admin';
+import { ShieldAlert } from 'lucide-react';
 
 const ProtectedRoute = ({ children }) => {
     const [user, setUser] = useState(null);
@@ -25,7 +26,11 @@ const ProtectedRoute = ({ children }) => {
     }, []);
 
     if (loading) {
-        return <div className="min-h-screen flex items-center justify-center bg-[#050b14] text-white">Loading...</div>;
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-[#F7FAFA] text-[#102A28]">
+                <p className="text-sm text-[#8A9B98]">Loading...</p>
+            </div>
+        );
     }
 
     if (!user) {
@@ -34,27 +39,30 @@ const ProtectedRoute = ({ children }) => {
 
     if (!isAuthorized) {
         return (
-            <div className="min-h-screen flex flex-col items-center justify-center bg-[#050b14] text-white p-4 text-center">
-                <div className="bg-red-500/10 p-4 rounded-full mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-red-500"><circle cx="12" cy="12" r="10" /><path d="m15 9-6 6" /><path d="m9 9 6 6" /></svg>
-                </div>
-                <h1 className="text-3xl font-bold text-white mb-2">Access Denied</h1>
-                <p className="text-slate-400 mb-8 max-w-md">
-                    You do not have permission to access the admin dashboard. This area is restricted to authorized personnel only.
-                </p>
-                <div className="flex gap-4">
-                    <button
-                        onClick={() => auth.signOut()}
-                        className="px-6 py-2 bg-slate-800 border border-slate-700 rounded-lg hover:bg-slate-700 transition-colors"
-                    >
-                        Sign Out
-                    </button>
-                    <a
-                        href="/"
-                        className="px-6 py-2 bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                        Return Home
-                    </a>
+            <div className="min-h-screen flex flex-col items-center justify-center bg-[#F7FAFA] text-[#102A28] p-6 text-center font-sans">
+                <div className="max-w-md w-full bg-white border border-[#DDE7E5] rounded-[12px] p-8 shadow-sm">
+                    <div className="w-14 h-14 bg-[#FEF2F2] text-[#DC2626] rounded-full flex items-center justify-center mx-auto mb-4 border border-[#FCA5A5]">
+                        <ShieldAlert size={28} />
+                    </div>
+                    <h1 className="text-2xl font-semibold text-[#102A28] mb-2">Access Denied</h1>
+                    <p className="text-sm text-[#4B5F5C] mb-8 leading-relaxed">
+                        You do not have permission to access the admin dashboard. This area is restricted to authorized personnel only.
+                    </p>
+                    <div className="flex flex-wrap items-center justify-center gap-3">
+                        <button
+                            type="button"
+                            onClick={() => auth.signOut()}
+                            className="btn-secondary"
+                        >
+                            Sign out
+                        </button>
+                        <a
+                            href="/"
+                            className="btn-primary"
+                        >
+                            Return home
+                        </a>
+                    </div>
                 </div>
             </div>
         );

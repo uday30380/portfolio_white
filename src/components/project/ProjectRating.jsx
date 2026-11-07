@@ -1,40 +1,43 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Award, Star } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-const ProjectRating = ({ projectId, onRatingChange }) => {
-    const [rating, setRating] = useState(0);
-    const [averageRating, setAverageRating] = useState(0);
-    const [totalRatings, setTotalRatings] = useState(0);
-    const [hoverRating, setHoverRating] = useState(0);
-    const [userRating, setUserRating] = useState(0);
-    const [ratingDistribution, setRatingDistribution] = useState([0, 0, 0, 0, 0]);
-
-    useEffect(() => {
-        // Load ratings from localStorage
+// Helper to load ratings from localStorage for a given projectId
+const loadRatingsData = (projectId) => {
+    try {
         const savedData = localStorage.getItem(`ratings-${projectId}`);
         const ratingsData = savedData ? JSON.parse(savedData) : { ratings: [], distribution: [0, 0, 0, 0, 0] };
         const userRatingData = localStorage.getItem(`user-rating-${projectId}`);
 
-        if (ratingsData.ratings.length > 0) {
-            const avg = ratingsData.ratings.reduce((sum, r) => sum + r, 0) / ratingsData.ratings.length;
+        let averageRating = 0;
+        let totalRatings = 0;
+        let ratingDistribution = [0, 0, 0, 0, 0];
+        let userRating = 0;
 
-            // eslint-disable-next-line react-hooks/set-state-in-effect
-            setAverageRating(prev => prev === avg ? prev : avg);
-            // eslint-disable-next-line react-hooks/set-state-in-effect
-            setTotalRatings(prev => prev === ratingsData.ratings.length ? prev : ratingsData.ratings.length);
-            // eslint-disable-next-line react-hooks/set-state-in-effect
-            setRatingDistribution(prev => JSON.stringify(prev) === JSON.stringify(ratingsData.distribution) ? prev : ratingsData.distribution);
+        if (ratingsData.ratings.length > 0) {
+            averageRating = ratingsData.ratings.reduce((sum, r) => sum + r, 0) / ratingsData.ratings.length;
+            totalRatings = ratingsData.ratings.length;
+            ratingDistribution = ratingsData.distribution;
         }
 
         if (userRatingData) {
-            const userRatingValue = parseInt(userRatingData);
-            // eslint-disable-next-line react-hooks/set-state-in-effect
-            setUserRating(prev => prev === userRatingValue ? prev : userRatingValue);
-            // eslint-disable-next-line react-hooks/set-state-in-effect
-            setRating(prev => prev === userRatingValue ? prev : userRatingValue);
+            userRating = parseInt(userRatingData);
         }
-    }, [projectId]);
+
+        return { averageRating, totalRatings, ratingDistribution, userRating };
+    } catch {
+        return { averageRating: 0, totalRatings: 0, ratingDistribution: [0, 0, 0, 0, 0], userRating: 0 };
+    }
+};
+
+const ProjectRating = ({ projectId, onRatingChange }) => {
+    // Lazily initialize all state from localStorage — no useEffect needed
+    const [rating, setRating] = useState(() => loadRatingsData(projectId).userRating);
+    const [averageRating, setAverageRating] = useState(() => loadRatingsData(projectId).averageRating);
+    const [totalRatings, setTotalRatings] = useState(() => loadRatingsData(projectId).totalRatings);
+    const [hoverRating, setHoverRating] = useState(0);
+    const [userRating, setUserRating] = useState(() => loadRatingsData(projectId).userRating);
+    const [ratingDistribution, setRatingDistribution] = useState(() => loadRatingsData(projectId).ratingDistribution);
 
     const handleRating = (value) => {
         const ratingsData = JSON.parse(localStorage.getItem(`ratings-${projectId}`) || '{"ratings": [], "distribution": [0,0,0,0,0]}');

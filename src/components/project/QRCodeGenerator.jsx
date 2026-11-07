@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
+﻿import React from 'react';
+import { motion } from 'framer-motion';
 import { X, Download } from 'lucide-react';
 import QRCode from 'react-qr-code';
 
@@ -89,3 +89,4 @@ const QRCodeGenerator = ({ url, title, onClose }) => {
 };
 
 export default QRCodeGenerator;
+

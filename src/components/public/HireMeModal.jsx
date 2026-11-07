@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { X, Send, CheckCircle, Briefcase, DollarSign, Calendar } from 'lucide-react';
-import { AnimatePresence, motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
+import { AnimatePresence, motion } from 'framer-motion';
 import { db } from '../../firebase';
 import { collection, addDoc } from 'firebase/firestore';
 
@@ -175,3 +175,4 @@ const HireMeModal = () => {
 };
 
 export default HireMeModal;
+

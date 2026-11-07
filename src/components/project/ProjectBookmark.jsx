@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
+﻿import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Bookmark, BookmarkCheck } from 'lucide-react';
 
 const ProjectBookmark = ({ projectId, onBookmarkChange }) => {
@@ -59,3 +59,4 @@ const ProjectBookmark = ({ projectId, onBookmarkChange }) => {
 };
 
 export default ProjectBookmark;
+

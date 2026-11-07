@@ -1,17 +1,24 @@
 import React, { useState } from 'react';
-import { Save, ArrowRight } from 'lucide-react';
+import { Save } from 'lucide-react';
 import { useData } from '../../context/DataContext';
+import ImageUpload from './ImageUpload';
 
 const AdminProfile = () => {
     const { data, updateData } = useData();
     const [heroData, setHeroData] = useState(data.hero || {});
     const [aboutData, setAboutData] = useState(data.about || {});
+    const [prevHero, setPrevHero] = useState(data.hero);
+    const [prevAbout, setPrevAbout] = useState(data.about);
 
-    // Sync state with data from context (Firestore)
-    React.useEffect(() => {
-        if (data.hero) setHeroData(data.hero);
-        if (data.about) setAboutData(data.about);
-    }, [data.hero, data.about]);
+    // Sync state when context data loads without triggering cascading renders in effect
+    if (data.hero !== prevHero) {
+        setPrevHero(data.hero);
+        setHeroData(data.hero || {});
+    }
+    if (data.about !== prevAbout) {
+        setPrevAbout(data.about);
+        setAboutData(data.about || {});
+    }
 
     const handleHeroChange = (e) => {
         const { name, value } = e.target;
@@ -29,6 +36,7 @@ const AdminProfile = () => {
 
     const saveHero = async () => {
         await updateData('hero', heroData);
+        alert('Hero identity saved.');
     };
 
     const handleClearHeroImage = () => {
@@ -37,6 +45,7 @@ const AdminProfile = () => {
 
     const saveAbout = async () => {
         await updateData('about', aboutData);
+        alert('About section saved.');
     };
 
     const handleClearAboutImage = () => {
@@ -44,179 +53,91 @@ const AdminProfile = () => {
     };
 
     return (
-        <div className="space-y-12 animate-fade-in max-w-5xl">
+        <div className="space-y-8 max-w-4xl text-[#102A28]">
             {/* Hero Section */}
-            <div className="bg-[#111111] border border-white/5 rounded-[48px] p-12 relative overflow-hidden">
-                <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500/5 rounded-full blur-3xl -mr-20 -mt-20"></div>
-
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6 relative z-10">
+            <div className="bg-white border border-[#DDE7E5] rounded-[12px] p-6 md:p-8 shadow-sm space-y-6">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-[#DDE7E5]">
                     <div>
-                        <div className="flex items-center gap-3 mb-2">
-                            <div className="w-8 h-[2px] bg-orange-500"></div>
-                            <span className="text-[10px] font-black tracking-[0.3em] text-orange-500 uppercase">Persona Config</span>
-                        </div>
-                        <h2 className="text-3xl font-black text-white">Hero Identity</h2>
+                        <h2 className="text-lg font-semibold text-[#102A28]">Hero profile</h2>
+                        <p className="text-xs text-[#8A9B98]">Header name, role, and portrait</p>
                     </div>
-                    <button onClick={saveHero} className="px-10 py-4 bg-orange-500 hover:bg-orange-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-orange-500/20 flex items-center gap-2 group">
-                        <Save size={18} /> Commit Hero <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                    <button onClick={saveHero} className="btn-primary">
+                        <Save size={16} />
+                        <span>Save hero</span>
                     </button>
                 </div>
 
-                <div className="space-y-8 relative z-10">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <InputField label="Signature Name" name="name" value={heroData.name} onChange={handleHeroChange} placeholder="Uday Kiran" />
-                        <InputField label="Global Tagline" name="tagline" value={heroData.tagline} onChange={handleHeroChange} placeholder="Product Designer & Developer" />
+                <div className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <InputField label="Name" name="name" value={heroData.name} onChange={handleHeroChange} placeholder="Uday Kiran Vempati" />
+                        <InputField label="One-line role" name="tagline" value={heroData.tagline} onChange={handleHeroChange} placeholder="Full-stack developer and designer, B.Tech at KL University" />
                     </div>
-                    {/* New Badge Config */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-white/5 p-6 rounded-3xl border border-white/5">
-                        <InputField label="Floating Badge Main Text" name="expTitle" value={heroData.expTitle} onChange={handleHeroChange} placeholder="2nd Year" />
-                        <InputField label="Floating Badge Sub Label" name="expSubtitle" value={heroData.expSubtitle} onChange={handleHeroChange} placeholder="Student" />
-                    </div>
-                    <InputField
-                        label="Core Expertise (comma separated)"
-                        name="titles"
-                        value={Array.isArray(heroData.titles) ? heroData.titles.join(', ') : ''}
-                        onChange={handleHeroChange}
-                        placeholder="AI Automation, UI Design, Strategy"
-                    />
-                    <div className="space-y-4">
-                        <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Elite Intro</label>
+
+                    <div>
+                        <label className="block text-xs font-medium text-[#4B5F5C] mb-1.5">Intro text</label>
                         <textarea
                             name="intro"
                             value={heroData.intro || ''}
                             onChange={handleHeroChange}
-                            rows="4"
-                            className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all font-bold resize-none"
-                            placeholder="Craft a high-impact introduction..."
+                            rows="3"
+                            className="w-full bg-[#FFFFFF] border border-[#DDE7E5] rounded-[8px] p-3 text-sm text-[#102A28] focus:outline-none focus:border-[#7CC7BD] focus:ring-[3px] focus:ring-[#E6F4F2] resize-y leading-relaxed"
+                            placeholder="I build and ship usable digital products..."
                         />
                     </div>
-                    <div className="space-y-2">
-                        <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Asset Avatar URL</label>
-                        <div className="flex gap-4 items-start">
-                            <input
-                                name="image"
-                                value={heroData.image || ''}
-                                onChange={handleHeroChange}
-                                className="flex-1 bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all font-bold"
-                                placeholder="https://..."
-                            />
-                            {heroData.image && (
-                                <div className="relative w-14 h-14 rounded-xl overflow-hidden border border-white/10 group flex-shrink-0">
-                                    <img src={heroData.image} alt="Preview" className="w-full h-full object-cover" />
-                                    <button
-                                        onClick={handleClearHeroImage}
-                                        className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all"
-                                    >
-                                        <ArrowRight size={14} className="text-white rotate-45" /> {/* Using generic icon as X substitute or styled X */}
-                                        <div className="absolute inset-0 flex items-center justify-center">
-                                            <span className="text-white font-bold text-xs">✕</span>
-                                        </div>
-                                    </button>
-                                </div>
-                            )}
-                        </div>
+
+                    <div>
+                        <ImageUpload
+                            label="Hero portrait image"
+                            helperText="Upload photo directly to ImgBB or provide direct link"
+                            compact={true}
+                            currentImage={heroData.image}
+                            onImageUploaded={(url) => setHeroData(prev => ({ ...prev, image: url }))}
+                            onImageRemoved={handleClearHeroImage}
+                        />
                     </div>
                 </div>
             </div>
 
             {/* About Section */}
-            <div className="bg-[#111111] border border-white/5 rounded-[48px] p-12 relative overflow-hidden">
-                <div className="absolute bottom-0 left-0 w-64 h-64 bg-orange-500/5 rounded-full blur-3xl -ml-20 -mb-20"></div>
-
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6 relative z-10">
+            <div className="bg-white border border-[#DDE7E5] rounded-[12px] p-6 md:p-8 shadow-sm space-y-6">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-4 border-b border-[#DDE7E5]">
                     <div>
-                        <div className="flex items-center gap-3 mb-2">
-                            <div className="w-8 h-[2px] bg-orange-500"></div>
-                            <span className="text-[10px] font-black tracking-[0.3em] text-orange-500 uppercase">Narrative Config</span>
-                        </div>
-                        <h2 className="text-3xl font-black text-white">About Matrix</h2>
+                        <h2 className="text-lg font-semibold text-[#102A28]">About biography</h2>
+                        <p className="text-xs text-[#8A9B98]">Personal story and university timeline background</p>
                     </div>
-                    <button onClick={saveAbout} className="px-10 py-4 bg-orange-500 hover:bg-orange-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest transition-all shadow-xl shadow-orange-500/20 flex items-center gap-2 group">
-                        <Save size={18} /> Commit Narrative <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                    <button onClick={saveAbout} className="btn-primary">
+                        <Save size={16} />
+                        <span>Save about</span>
                     </button>
                 </div>
 
-                <div className="space-y-8 relative z-10">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <InputField label="Header" name="heading" value={aboutData.heading} onChange={handleAboutChange} placeholder="Turning Ideas into Digital Masterpieces" />
-                        <InputField label="Sub-Header" name="subheading" value={aboutData.subheading} onChange={handleAboutChange} placeholder="Strategy Meets Execution" />
+                <div className="space-y-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <InputField label="Section heading" name="heading" value={aboutData.heading} onChange={handleAboutChange} placeholder="About me" />
+                        <InputField label="Subheading" name="subheading" value={aboutData.subheading} onChange={handleAboutChange} placeholder="4 years at KL University" />
                     </div>
-                    <div className="space-y-4">
-                        <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Bio Fragment 01</label>
+
+                    <div>
+                        <label className="block text-xs font-medium text-[#4B5F5C] mb-1.5">Primary bio paragraph</label>
                         <textarea
                             name="text1"
                             value={aboutData.text1 || ''}
                             onChange={handleAboutChange}
                             rows="4"
-                            className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all font-bold resize-none"
-                            placeholder="Primary biography paragraph..."
+                            className="w-full bg-[#FFFFFF] border border-[#DDE7E5] rounded-[8px] p-3 text-sm text-[#102A28] focus:outline-none focus:border-[#7CC7BD] focus:ring-[3px] focus:ring-[#E6F4F2] resize-y leading-relaxed"
+                            placeholder="Primary bio..."
                         />
-                    </div>
-                    <div className="space-y-4">
-                        <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Bio Fragment 02</label>
-                        <textarea
-                            name="text2"
-                            value={aboutData.text2 || ''}
-                            onChange={handleAboutChange}
-                            rows="4"
-                            className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all font-bold resize-none"
-                            placeholder="Secondary biography paragraph..."
-                        />
-                    </div>
-                    <div className="space-y-2">
-                        <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Narrative Image URL</label>
-                        <div className="flex gap-4 items-start">
-                            <input
-                                name="image"
-                                value={aboutData.image || ''}
-                                onChange={handleAboutChange}
-                                className="flex-1 bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all font-bold"
-                                placeholder="https://..."
-                            />
-                            {aboutData.image && (
-                                <div className="relative w-14 h-14 rounded-xl overflow-hidden border border-white/10 group flex-shrink-0">
-                                    <img src={aboutData.image} alt="Preview" className="w-full h-full object-cover" />
-                                    <button
-                                        onClick={handleClearAboutImage}
-                                        className="absolute inset-0 bg-black/60 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all"
-                                    >
-                                        <span className="text-white font-bold text-xs">✕</span>
-                                    </button>
-                                </div>
-                            )}
-                        </div>
                     </div>
 
-                    <div className="pt-10 border-t border-white/5">
-                        <label className="text-[10px] font-black text-orange-500 uppercase tracking-[0.4em] mb-8 block">Key Metrics (Stats)</label>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                            {aboutData.stats && aboutData.stats.map((stat, index) => (
-                                <div key={index} className="flex gap-4 p-4 bg-black/40 rounded-[24px] border border-white/5 group hover:border-orange-500/20 transition-all">
-                                    <input
-                                        type="text"
-                                        placeholder="Value"
-                                        value={stat.value}
-                                        onChange={(e) => {
-                                            const newStats = [...(aboutData.stats || [])];
-                                            newStats[index].value = e.target.value;
-                                            setAboutData(prev => ({ ...prev, stats: newStats }));
-                                        }}
-                                        className="w-24 bg-white/5 border border-white/5 rounded-xl px-4 py-2 text-orange-500 font-black text-center focus:outline-none focus:ring-1 focus:ring-orange-500"
-                                    />
-                                    <input
-                                        type="text"
-                                        placeholder="Label"
-                                        value={stat.label}
-                                        onChange={(e) => {
-                                            const newStats = [...(aboutData.stats || [])];
-                                            newStats[index].label = e.target.value;
-                                            setAboutData(prev => ({ ...prev, stats: newStats }));
-                                        }}
-                                        className="flex-1 bg-white/5 border border-white/5 rounded-xl px-4 py-2 text-white font-bold focus:outline-none focus:ring-1 focus:ring-orange-500"
-                                    />
-                                </div>
-                            ))}
-                        </div>
+                    <div>
+                        <ImageUpload
+                            label="About photo (Optional)"
+                            helperText="Upload image or provide direct link"
+                            compact={true}
+                            currentImage={aboutData.image}
+                            onImageUploaded={(url) => setAboutData(prev => ({ ...prev, image: url }))}
+                            onImageRemoved={handleClearAboutImage}
+                        />
                     </div>
                 </div>
             </div>
@@ -227,14 +148,14 @@ const AdminProfile = () => {
 export default AdminProfile;
 
 const InputField = ({ label, name, value, onChange, type = "text", placeholder }) => (
-    <div className="space-y-4">
-        <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">{label}</label>
+    <div>
+        <label className="block text-xs font-medium text-[#4B5F5C] mb-1.5">{label}</label>
         <input
             type={type}
             name={name}
             value={value || ''}
             onChange={onChange}
-            className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all font-bold"
+            className="w-full bg-[#FFFFFF] border border-[#DDE7E5] rounded-[8px] h-10 px-3 text-sm text-[#102A28] focus:outline-none focus:border-[#7CC7BD] focus:ring-[3px] focus:ring-[#E6F4F2]"
             placeholder={placeholder}
         />
     </div>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion'; // eslint-disable-line no-unused-vars
+import { motion, AnimatePresence } from 'framer-motion';
 import { X, Download, Share2, ExternalLink, QrCode, Printer, ZoomIn, ZoomOut, CheckCircle, ShieldCheck } from 'lucide-react';
 import QRCode from 'react-qr-code';
 
@@ -58,8 +58,8 @@ const CertificateModal = ({ certificate, onClose }) => {
 
                         <div className="overflow-auto w-full h-full flex items-center justify-center no-scrollbar" id="certificate-print-area">
                             <motion.img
-                                src={certificate.image}
-                                alt={certificate.title}
+                                src={certificate?.image?.trim() ? certificate.image : null}
+                                alt={certificate?.title || 'Certificate'}
                                 style={{ scale: zoom }}
                                 className="max-w-full max-h-full object-contain shadow-2xl rounded-lg transition-transform duration-200"
                             />
@@ -92,7 +92,7 @@ const CertificateModal = ({ certificate, onClose }) => {
                             <div className="flex-1 pr-4">
                                 <div className="flex items-center gap-2 mb-3">
                                     <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${certificate.category === 'Award' ? 'bg-yellow-500/10 text-yellow-500 border-yellow-500/20' :
-                                        certificate.category === 'Certification' ? 'bg-blue-500/10 text-blue-500 border-blue-500/20' :
+                                        certificate.category === 'Certification' ? 'bg-[#EEF4F3] text-[#4B5F5C] border-[#DDE7E5]' :
                                             'bg-purple-500/10 text-purple-500 border-purple-500/20'
                                         }`}>
                                         {certificate.category}
@@ -180,3 +180,4 @@ const CertificateModal = ({ certificate, onClose }) => {
 };
 
 export default CertificateModal;
+

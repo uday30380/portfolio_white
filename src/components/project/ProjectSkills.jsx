@@ -1,6 +1,6 @@
-import React from 'react';
+﻿import React from 'react';
 import { BadgeCheck } from 'lucide-react';
-import { motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
+import { motion } from 'framer-motion';
 
 const ProjectSkills = ({ skills }) => {
     if (!skills || skills.length === 0) return null;
@@ -24,3 +24,4 @@ const ProjectSkills = ({ skills }) => {
 };
 
 export default ProjectSkills;
+

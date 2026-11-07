@@ -1,149 +1,191 @@
-import React, { useState } from 'react';
-import Footer from '../components/public/Footer';
-import { Calendar, ArrowRight, Search, Clock, ArrowLeft } from 'lucide-react';
+import React, { useState, useMemo } from 'react';
+import { Search, ArrowRight, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useData } from '../context/DataContext';
-import PageWrapper from '../components/public/PageWrapper';
-import { motion, AnimatePresence } from 'framer-motion';
-import SmokeEffect from '../components/public/SmokeEffect';
+import Navbar from '../components/public/Navbar';
+import Footer from '../components/public/Footer';
+import SEO from '../components/public/SEO';
+
+const fallbackPosts = [
+    {
+        id: 1,
+        title: 'Building and publishing my first mobile app on the Amazon App Store',
+        category: 'Engineering',
+        date: 'October 2024',
+        readTime: '5 min read',
+        excerpt: 'The lessons learned taking a standalone mobile application from concept to production submission, handling distribution and user feedback as a sophomore.',
+        image: '/uday-portrait.png'
+    },
+    {
+        id: 2,
+        title: 'Designing with restraint: A product designer’s guide to calm interfaces',
+        category: 'Design',
+        date: 'August 2024',
+        readTime: '4 min read',
+        excerpt: 'Why cutting extraneous effects, glows, and noise creates a substantially faster, more accessible, and more trustworthy experience for end users.',
+        image: '/uday-portrait.png'
+    },
+    {
+        id: 3,
+        title: 'Leading creative direction for student clubs at KL University',
+        category: 'Student Life',
+        date: 'May 2024',
+        readTime: '6 min read',
+        excerpt: 'Reflections on organizing design workflows, mentoring first-year teammates, and building recognizable digital branding across university events.',
+        image: '/uday-portrait.png'
+    }
+];
+
+const categories = ['All', 'Engineering', 'Design', 'Student Life'];
 
 const Blog = () => {
-    const { data } = useData();
+    const { data } = useData() || {};
     const [searchQuery, setSearchQuery] = useState('');
+    const [activeCategory, setActiveCategory] = useState('All');
 
-    const blogPosts = data?.blog || [];
+    const posts = useMemo(() => {
+        const raw = (data?.blog && data.blog.length > 0) ? data.blog : fallbackPosts;
+        return raw;
+    }, [data]);
 
-    const filteredPosts = blogPosts.filter(post =>
-        post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        post.excerpt.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const filtered = useMemo(() => {
+        return posts.filter(post => {
+            const matchesCategory = activeCategory === 'All' || (post.category || 'Engineering') === activeCategory;
+            const query = searchQuery.toLowerCase().trim();
+            const matchesQuery = !query ||
+                post.title.toLowerCase().includes(query) ||
+                (post.excerpt && post.excerpt.toLowerCase().includes(query));
+            return matchesCategory && matchesQuery;
+        });
+    }, [posts, activeCategory, searchQuery]);
 
     return (
-        <PageWrapper className="min-h-screen bg-[#0A0A0A] text-white overflow-hidden relative">
-            <SmokeEffect color="249, 115, 22" opacity={0.15} density={40} />
+        <div className="min-h-screen bg-[#F7FAFA] text-[#102A28] flex flex-col justify-between">
+            <SEO
+                title="Blog · Uday Kiran Vempati"
+                description="Articles on software engineering, product design, and building real digital products."
+            />
+            <Navbar />
 
-            {/* Custom Header (Replaces Navbar) */}
-            <div className="relative z-50 px-6 py-8 flex justify-between items-center max-w-7xl mx-auto w-full">
-                <Link to="/" className="flex items-center gap-3 group">
-                    <div className="p-3 bg-white/5 group-hover:bg-white/10 rounded-full transition-all border border-white/5">
-                        <ArrowLeft size={20} className="text-gray-400 group-hover:text-white" />
+            <main className="py-12 md:py-20 flex-1">
+                <div className="max-w-[1100px] mx-auto px-6">
+                    {/* Back Link */}
+                    <Link
+                        to="/"
+                        className="inline-flex items-center gap-1.5 text-sm text-[#4B5F5C] hover:text-[#0F766E] font-medium mb-8 transition-colors"
+                    >
+                        <ArrowLeft size={16} />
+                        <span>Back to home</span>
+                    </Link>
+
+                    {/* Header */}
+                    <div className="mb-10">
+                        <h1 className="text-3xl sm:text-4xl md:text-5xl font-semibold text-[#102A28] tracking-tight mb-3">
+                            Blog
+                        </h1>
+                        <p className="text-base text-[#4B5F5C] max-w-[620px]">
+                            Thoughts and case studies on full-stack development, product design, and building things that scale.
+                        </p>
                     </div>
-                    <span className="text-sm font-bold text-gray-400 group-hover:text-white uppercase tracking-widest transition-colors">Back to Home</span>
-                </Link>
-                <div className="hidden md:block">
-                    <span className="text-xs font-black text-orange-500 uppercase tracking-[0.3em]">Editorial / v2.0</span>
-                </div>
-            </div>
 
-            {/* Hero Section / Header */}
-            <div className="relative pt-12 pb-24 overflow-hidden">
-                <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-orange-500/10 rounded-full blur-[120px] -z-10 animate-pulse"></div>
-                <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-blue-500/5 rounded-full blur-[100px] -z-10"></div>
-
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="flex items-center justify-center gap-3 mb-8"
-                    >
-                        <div className="w-10 h-[2px] bg-orange-500"></div>
-                        <span className="text-sm font-bold tracking-[0.2em] text-orange-500 uppercase">Editorial Hub</span>
-                    </motion.div>
-
-                    <motion.h1
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.1 }}
-                        className="text-5xl md:text-8xl font-black text-white mb-12 leading-[1.1]"
-                    >
-                        Ideas, Tutorials <br />& <span className="text-orange-500">Insights</span>
-                    </motion.h1>
-
-                    {/* Search Field */}
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ delay: 0.2 }}
-                        className="max-w-2xl mx-auto relative group"
-                    >
+                    {/* Simple Search Box */}
+                    <div className="relative mb-6 max-w-md">
+                        <Search
+                            size={18}
+                            className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8A9B98] pointer-events-none"
+                        />
                         <input
                             type="text"
-                            placeholder="Explore our archives..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full bg-white/5 border border-white/10 rounded-full py-6 px-10 pl-16 text-white focus:outline-none focus:ring-4 focus:ring-orange-500/10 focus:border-orange-500 transition-all font-bold text-lg shadow-2xl backdrop-blur-sm placeholder:text-gray-600"
+                            placeholder="Search articles..."
+                            className="w-full h-11 pl-10 pr-4 rounded-lg border border-[#DDE7E5] bg-[#FFFFFF] text-sm text-[#102A28] placeholder:text-[#8A9B98] focus:outline-none focus:border-[#7CC7BD] focus:ring-[3px] focus:ring-[#E6F4F2] transition-colors"
                         />
-                        <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-gray-500 group-hover:text-orange-500 transition-colors" size={24} />
-                    </motion.div>
-                </div>
-            </div>
+                    </div>
 
-            {/* Blog Grid */}
-            <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-40">
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-                    <AnimatePresence mode="popLayout">
-                        {filteredPosts.length > 0 ? (
-                            filteredPosts.map((post, idx) => (
-                                <motion.div
-                                    layout
-                                    initial={{ opacity: 0, y: 30 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: idx * 0.1 }}
-                                    key={post.id}
-                                    className="group"
+                    {/* One Filter Row of Chips */}
+                    <div className="flex flex-wrap gap-2 mb-10">
+                        {categories.map((cat) => {
+                            const isSelected = activeCategory === cat;
+                            return (
+                                <button
+                                    key={cat}
+                                    type="button"
+                                    onClick={() => setActiveCategory(cat)}
+                                    className={`h-9 px-4 rounded-lg text-sm font-medium transition-colors border ${
+                                        isSelected
+                                            ? 'bg-[#0F766E] text-white border-[#0F766E]'
+                                            : 'bg-[#E6F4F2] text-[#0F766E] border-[#DDE7E5] hover:border-[#7CC7BD]'
+                                    }`}
                                 >
-                                    <Link to={`/blog/${post.id}`} className="block h-full flex flex-col">
-                                        <div className="aspect-[16/10] rounded-[40px] overflow-hidden mb-8 border border-white/5 group-hover:border-orange-500/50 shadow-2xl relative transition-all duration-500 bg-[#111]">
-                                            <img
-                                                src={(post.images && post.images.length > 0 ? post.images[0] : post.image) || 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?fit=crop&w=800&q=80'}
-                                                alt={post.title}
-                                                className="w-full h-full object-contain opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
-                                            />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
+                                    {cat}
+                                </button>
+                            );
+                        })}
+                    </div>
 
-                                            <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between">
-                                                <div className="bg-black/50 backdrop-blur-md px-4 py-2 rounded-full border border-white/10 text-[10px] font-black uppercase tracking-widest text-white group-hover:bg-orange-500 group-hover:border-orange-500 transition-colors">
-                                                    Read Article
+                    {/* Grid of Clean Cards */}
+                    {filtered.length === 0 ? (
+                        <div className="p-12 text-center rounded-xl border border-[#DDE7E5] bg-[#FFFFFF]">
+                            <p className="text-base text-[#4B5F5C]">
+                                No articles match your search.
+                            </p>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {filtered.map((post) => {
+                                const imageSrc = post.image?.trim() ? post.image : (post.images?.[0] || '/uday-portrait.png');
+                                return (
+                                    <article
+                                        key={post.id}
+                                        className="bg-[#FFFFFF] border border-[#DDE7E5] rounded-xl overflow-hidden shadow-sm hover:border-[#7CC7BD] hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between"
+                                    >
+                                        <div>
+                                            <div className="aspect-[16/10] bg-[#EEF4F3] border-b border-[#DDE7E5] overflow-hidden">
+                                                <img
+                                                    src={imageSrc}
+                                                    alt={post.title}
+                                                    className="w-full h-full object-cover"
+                                                    loading="lazy"
+                                                />
+                                            </div>
+
+                                            <div className="p-6 pb-2">
+                                                <div className="flex items-center gap-2 text-xs font-medium text-[#8A9B98] mb-3">
+                                                    <span>{post.date || '2024'}</span>
+                                                    <span>·</span>
+                                                    <span>{post.readTime || '4 min read'}</span>
                                                 </div>
+
+                                                <h2 className="text-xl font-semibold text-[#102A28] mb-2.5 line-clamp-2">
+                                                    {post.title}
+                                                </h2>
+
+                                                <p className="text-sm text-[#4B5F5C] leading-relaxed line-clamp-3 mb-4">
+                                                    {post.excerpt || post.description}
+                                                </p>
                                             </div>
                                         </div>
 
-                                        <div className="flex-1 flex flex-col px-2">
-                                            <div className="flex items-center gap-6 text-[10px] font-black text-gray-500 uppercase tracking-widest mb-4">
-                                                <span className="flex items-center gap-2 group-hover:text-orange-500 transition-colors"><Calendar size={14} /> {post.date}</span>
-                                                <span className="flex items-center gap-2"><Clock size={14} /> {post.readTime || '5 min read'}</span>
-                                            </div>
-
-                                            <h3 className="text-2xl font-black text-white mb-4 group-hover:text-orange-500 transition-colors leading-tight line-clamp-2 uppercase tracking-tight">
-                                                {post.title}
-                                            </h3>
-
-                                            <p className="text-gray-400 text-sm leading-relaxed line-clamp-3 font-medium mb-6">
-                                                {post.excerpt}
-                                            </p>
-
-                                            <div className="mt-auto pt-4 flex items-center gap-3 text-xs font-black text-white uppercase tracking-widest group-hover:text-orange-500 transition-all">
-                                                View Publication
-                                                <div className="w-8 h-[2px] bg-white group-hover:w-16 group-hover:bg-orange-500 transition-all duration-500"></div>
-                                            </div>
+                                        <div className="px-6 pb-6 pt-2">
+                                            <Link
+                                                to={`/blog/${post.id}`}
+                                                className="link-accent text-sm"
+                                            >
+                                                <span>Read article</span>
+                                                <ArrowRight size={15} />
+                                            </Link>
                                         </div>
-                                    </Link>
-                                </motion.div>
-                            ))
-                        ) : (
-                            <div className="col-span-full text-center py-40 border-2 border-dashed border-white/5 rounded-[48px] bg-white/5">
-                                <Search size={64} className="mx-auto text-gray-700 mb-6" />
-                                <h3 className="text-2xl font-black text-white uppercase tracking-[0.2em] mb-2">Zero Results Found</h3>
-                                <p className="text-gray-500 mb-8">We couldn't find any articles matching "{searchQuery}"</p>
-                                <button onClick={() => setSearchQuery('')} className="px-8 py-3 bg-orange-500 text-white rounded-xl font-bold uppercase tracking-widest hover:bg-orange-600 transition-colors">Clear Filter</button>
-                            </div>
-                        )}
-                    </AnimatePresence>
+                                    </article>
+                                );
+                            })}
+                        </div>
+                    )}
                 </div>
-            </div>
+            </main>
 
             <Footer />
-        </PageWrapper>
+        </div>
     );
 };
 

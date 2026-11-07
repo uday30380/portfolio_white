@@ -11,14 +11,22 @@ const ScrollToAnchor = () => {
             const timer = setTimeout(() => {
                 const element = document.getElementById(hash.slice(1));
                 if (element) {
-                    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    if (window.__lenis) {
+                        window.__lenis.scrollTo(element, { offset: -30, duration: 1.2 });
+                    } else {
+                        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
                 }
             }, 100);
 
             return () => clearTimeout(timer);
         } else {
             // No hash, standard scroll to top
-            window.scrollTo(0, 0);
+            if (window.__lenis) {
+                window.__lenis.scrollTo(0, { duration: 1.0 });
+            } else {
+                window.scrollTo(0, 0);
+            }
         }
     }, [pathname, hash]);
 

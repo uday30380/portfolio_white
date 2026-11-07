@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { Search, X } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion'; // eslint-disable-line no-unused-vars
+import { motion, AnimatePresence } from 'framer-motion';
 
 const SearchBar = ({ onSearch, placeholder = "Search projects..." }) => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -59,3 +59,4 @@ const SearchBar = ({ onSearch, placeholder = "Search projects..." }) => {
 };
 
 export default SearchBar;
+

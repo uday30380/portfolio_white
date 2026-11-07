@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
+import { motion } from 'framer-motion';
 import { X, Linkedin, Image, Send, Check, AlertCircle } from 'lucide-react';
 
 const LinkedInIntegration = ({ project, url, onClose }) => {
@@ -59,7 +59,7 @@ const LinkedInIntegration = ({ project, url, onClose }) => {
                 {/* Header */}
                 <div className="flex items-center justify-between mb-6">
                     <div className="flex items-center gap-3">
-                        <div className="p-3 bg-blue-600 rounded-xl">
+                        <div className="p-3 bg-[#102A28] rounded-xl">
                             <Linkedin size={24} className="text-white" />
                         </div>
                         <div>
@@ -84,7 +84,7 @@ const LinkedInIntegration = ({ project, url, onClose }) => {
                         value={postText}
                         onChange={(e) => setPostText(e.target.value)}
                         rows={8}
-                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:border-blue-500/50 focus:bg-white/10 transition-all resize-none font-medium"
+                        className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-white placeholder-gray-500 focus:outline-none focus:text-[#4B5F5C]/50 focus:bg-white/10 transition-all resize-none font-medium"
                         placeholder="Write your LinkedIn post..."
                     />
                     <div className="flex items-center justify-between mt-2">
@@ -94,7 +94,7 @@ const LinkedInIntegration = ({ project, url, onClose }) => {
                 </div>
 
                 {/* Image Preview */}
-                {includeImage && project.image && (
+                {includeImage && project.image?.trim() && (
                     <div className="mb-6">
                         <label className="block text-sm font-bold text-white mb-3 uppercase tracking-wider">
                             Attached Image
@@ -127,8 +127,8 @@ const LinkedInIntegration = ({ project, url, onClose }) => {
                 )}
 
                 {/* URL Display */}
-                <div className="mb-6 p-4 bg-blue-500/10 border border-blue-500/20 rounded-2xl">
-                    <p className="text-xs text-blue-400 mb-2 uppercase tracking-wider font-bold">Link to Share</p>
+                <div className="mb-6 p-4 bg-[#EEF4F3] border border-[#DDE7E5] rounded-2xl">
+                    <p className="text-xs text-[#8A9B98] mb-2 uppercase tracking-wider font-bold">Link to Share</p>
                     <p className="text-sm text-white break-all font-mono">{url}</p>
                 </div>
 
@@ -167,7 +167,7 @@ const LinkedInIntegration = ({ project, url, onClose }) => {
                     <button
                         onClick={shareToLinkedIn}
                         disabled={posting || posted}
-                        className="flex-1 px-6 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-2xl font-bold flex items-center justify-center gap-3 hover:shadow-xl hover:shadow-blue-500/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="flex-1 px-6 py-4 bg-gradient-to-r text-[#4B5F5C] text-[#4B5F5C] text-white rounded-2xl font-bold flex items-center justify-center gap-3 hover:shadow-xl hover:bg-[#EEF4F3] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         {posting ? (
                             <>
@@ -201,3 +201,4 @@ const LinkedInIntegration = ({ project, url, onClose }) => {
 };
 
 export default LinkedInIntegration;
+

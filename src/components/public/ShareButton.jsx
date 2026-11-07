@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+﻿import React, { useState } from 'react';
 import { Share2, Twitter, Linkedin, Facebook, Link as LinkIcon, Check } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion'; // eslint-disable-line no-unused-vars
+import { motion, AnimatePresence } from 'framer-motion';
 
 const ShareButton = ({ url, title, description }) => {
     const [isOpen, setIsOpen] = useState(false);
@@ -41,19 +41,19 @@ const ShareButton = ({ url, title, description }) => {
             name: 'Twitter',
             icon: Twitter,
             url: `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareTitle)}`,
-            color: 'hover:bg-blue-500'
+            color: 'text-[#4B5F5C]'
         },
         {
             name: 'LinkedIn',
             icon: Linkedin,
             url: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl)}`,
-            color: 'hover:bg-blue-600'
+            color: 'hover:bg-[#102A28]'
         },
         {
             name: 'Facebook',
             icon: Facebook,
             url: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
-            color: 'hover:bg-blue-700'
+            color: 'hover:bg-[#0B5C56]'
         }
     ];
 
@@ -139,3 +139,4 @@ const ShareButton = ({ url, title, description }) => {
 };
 
 export default ShareButton;
+

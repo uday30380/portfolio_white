@@ -1,25 +1,23 @@
 import React from 'react';
-import { motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
+import { motion } from 'framer-motion';
 import { Users, Github, Linkedin, ExternalLink } from 'lucide-react';
 
 const ProjectContributors = ({ contributors = [] }) => {
     // Mock contributors if none provided
-    const displayContributors = contributors.length > 0 ? contributors : [
+    const displayContributors = (contributors.length > 0 ? contributors : [
         {
             name: 'Uday Kiran Vempati',
             role: 'Lead Developer & Designer',
-            avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&w=100',
-            github: '#',
-            linkedin: '#'
-        },
-        {
-            name: 'AI Assistant',
-            role: 'Architecture & Features',
-            avatar: 'https://images.unsplash.com/photo-1675271591211-126ad94e495d?fit=crop&w=100',
-            github: '#',
-            linkedin: '#'
+            avatar: '/uday-portrait.png',
+            github: 'https://github.com/udaykiranvempati',
+            linkedin: 'https://www.linkedin.com/in/uday-kiran-vempati'
         }
-    ];
+    ]).map(person => ({
+        ...person,
+        avatar: (!person.avatar || person.avatar.includes('unsplash.com') || person.avatar.includes('1507003211169') || person.avatar.includes('1675271591'))
+            ? '/uday-portrait.png'
+            : person.avatar
+    }));
 
     return (
         <div className="bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-xl border border-white/10 rounded-3xl p-8 shadow-xl">
@@ -41,9 +39,10 @@ const ProjectContributors = ({ contributors = [] }) => {
                         className="flex items-center gap-4 p-4 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-colors group"
                     >
                         <img
-                            src={person.avatar}
+                            src={person.avatar?.trim() ? person.avatar : '/uday-portrait.png'}
                             alt={person.name}
-                            className="w-16 h-16 rounded-xl object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
+                            className="w-16 h-16 rounded-xl object-cover grayscale-0 md:grayscale md:group-hover:grayscale-0 transition-all duration-500"
+                            loading="lazy"
                         />
                         <div className="flex-1 min-w-0">
                             <h4 className="text-lg font-black text-white truncate group-hover:text-orange-500 transition-colors">
@@ -72,3 +71,4 @@ const ProjectContributors = ({ contributors = [] }) => {
 };
 
 export default ProjectContributors;
+

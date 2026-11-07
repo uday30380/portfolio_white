@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useData } from '../../context/DataContext';
-import { Save, Link as LinkIcon, Plus, Trash2, Layout } from 'lucide-react';
+import { Save, Link as LinkIcon, Plus, Trash2 } from 'lucide-react';
 
 const AdminFooter = () => {
     const { data, updateData } = useData();
-    const [footerData, setFooterData] = useState(data.footer || {
+    const [footerData, setFooterData] = useState(data?.footer || {
         tagline: '',
         copyright: '',
         links: []
@@ -13,11 +13,11 @@ const AdminFooter = () => {
     const handleSave = async (e) => {
         e.preventDefault();
         await updateData('footer', footerData);
-        alert('Footer updated successfully!');
+        alert('Footer settings saved.');
     };
 
     const handleLinkChange = (index, field, value) => {
-        const newLinks = [...footerData.links];
+        const newLinks = [...(footerData.links || [])];
         newLinks[index] = { ...newLinks[index], [field]: value };
         setFooterData({ ...footerData, links: newLinks });
     };
@@ -25,89 +25,97 @@ const AdminFooter = () => {
     const addLink = () => {
         setFooterData({
             ...footerData,
-            links: [...footerData.links, { name: '', url: '' }]
+            links: [...(footerData.links || []), { name: '', url: '' }]
         });
     };
 
     const removeLink = (index) => {
-        const newLinks = footerData.links.filter((_, i) => i !== index);
+        const newLinks = (footerData.links || []).filter((_, i) => i !== index);
         setFooterData({ ...footerData, links: newLinks });
     };
 
     return (
-        <div className="space-y-10 animate-fade-in">
-            <div className="flex items-center gap-3 mb-2">
-                <div className="w-8 h-[2px] bg-orange-500"></div>
-                <span className="text-[10px] font-black tracking-[0.3em] text-orange-500 uppercase">Site Structure</span>
+        <div className="space-y-6 max-w-4xl text-[#102A28]">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h2 className="text-xl font-semibold text-[#102A28]">Footer configuration</h2>
+                    <p className="text-xs text-[#8A9B98]">Tagline, copyright notice, and social links</p>
+                </div>
+                <button
+                    type="submit"
+                    form="footerForm"
+                    className="btn-primary"
+                >
+                    <Save size={16} />
+                    <span>Save footer</span>
+                </button>
             </div>
-            <h2 className="text-3xl font-black text-white">Footer Configuration</h2>
 
-            <div className="bg-[#111111] rounded-[40px] border border-white/5 p-10 relative overflow-hidden">
-                <form onSubmit={handleSave} className="space-y-8 relative z-10">
-
-                    <div className="space-y-2">
-                        <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Tagline (Main Text)</label>
+            <div className="bg-white rounded-[12px] border border-[#DDE7E5] p-6 md:p-8 shadow-sm">
+                <form id="footerForm" onSubmit={handleSave} className="space-y-6">
+                    <div>
+                        <label className="block text-xs font-medium text-[#4B5F5C] mb-1.5">Tagline / Subtitle</label>
                         <input
                             type="text"
-                            value={footerData.tagline}
+                            value={footerData.tagline || ''}
                             onChange={(e) => setFooterData({ ...footerData, tagline: e.target.value })}
-                            className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all font-bold"
-                            placeholder="Designing the future..."
+                            className="w-full bg-[#F7FAFA] border border-[#DDE7E5] rounded-[8px] h-10 px-3 text-sm text-[#102A28] focus:outline-none focus:border-[#7CC7BD] focus:ring-[3px] focus:ring-[#E6F4F2]"
+                            placeholder="Full-stack developer and designer"
                         />
                     </div>
 
-                    <div className="space-y-2">
-                        <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Copyright Text</label>
+                    <div>
+                        <label className="block text-xs font-medium text-[#4B5F5C] mb-1.5">Copyright text</label>
                         <input
                             type="text"
-                            value={footerData.copyright}
+                            value={footerData.copyright || ''}
                             onChange={(e) => setFooterData({ ...footerData, copyright: e.target.value })}
-                            className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all font-bold"
-                            placeholder="© 2024 Uday Kiran..."
+                            className="w-full bg-[#F7FAFA] border border-[#DDE7E5] rounded-[8px] h-10 px-3 text-sm text-[#102A28] focus:outline-none focus:border-[#7CC7BD] focus:ring-[3px] focus:ring-[#E6F4F2]"
+                            placeholder="© 2026 Uday Kiran Vempati. All rights reserved."
                         />
                     </div>
 
-                    <div className="space-y-4">
+                    <div className="space-y-3 pt-4 border-t border-[#DDE7E5]">
                         <div className="flex justify-between items-center">
-                            <label className="text-[10px] font-black text-gray-500 uppercase tracking-widest ml-1">Footer Links</label>
-                            <button type="button" onClick={addLink} className="flex items-center gap-2 text-[10px] font-black uppercase text-orange-500 hover:text-white transition-colors">
-                                <Plus size={14} /> Add Link
+                            <label className="text-xs font-medium text-[#102A28]">Social & navigation links</label>
+                            <button
+                                type="button"
+                                onClick={addLink}
+                                className="text-xs text-[#0F766E] hover:underline flex items-center gap-1 font-medium"
+                            >
+                                <Plus size={14} />
+                                <span>Add link</span>
                             </button>
                         </div>
 
-                        {footerData.links.map((link, index) => (
-                            <div key={index} className="flex gap-4 items-center bg-white/5 p-4 rounded-2xl border border-white/5">
-                                <LinkIcon size={16} className="text-gray-500" />
-                                <div className="flex-1 grid md:grid-cols-2 gap-4">
+                        {(footerData.links || []).map((link, index) => (
+                            <div key={index} className="flex gap-3 items-center bg-[#F7FAFA] p-3 rounded-[8px] border border-[#DDE7E5]">
+                                <LinkIcon size={15} className="text-[#8A9B98] shrink-0" />
+                                <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-3">
                                     <input
                                         type="text"
                                         value={link.name}
                                         onChange={(e) => handleLinkChange(index, 'name', e.target.value)}
-                                        placeholder="Link Name (e.g. GitHub)"
-                                        className="bg-transparent border-b border-white/10 py-2 text-sm text-white focus:outline-none focus:border-orange-500 transition-colors"
+                                        placeholder="Label (e.g. GitHub)"
+                                        className="bg-white border border-[#DDE7E5] rounded-[6px] h-9 px-3 text-xs text-[#102A28] focus:outline-none focus:border-[#7CC7BD] focus:ring-[3px] focus:ring-[#E6F4F2]"
                                     />
                                     <input
                                         type="text"
                                         value={link.url}
                                         onChange={(e) => handleLinkChange(index, 'url', e.target.value)}
                                         placeholder="URL (https://...)"
-                                        className="bg-transparent border-b border-white/10 py-2 text-sm text-gray-400 focus:outline-none focus:border-orange-500 transition-colors"
+                                        className="bg-white border border-[#DDE7E5] rounded-[6px] h-9 px-3 text-xs text-[#102A28] focus:outline-none focus:border-[#7CC7BD] focus:ring-[3px] focus:ring-[#E6F4F2]"
                                     />
                                 </div>
-                                <button type="button" onClick={() => removeLink(index)} className="p-2 hover:bg-red-500/20 hover:text-red-500 rounded-lg transition-colors">
-                                    <Trash2 size={16} />
+                                <button
+                                    type="button"
+                                    onClick={() => removeLink(index)}
+                                    className="p-1.5 text-[#8A9B98] hover:text-[#DC2626] rounded transition-colors"
+                                >
+                                    <Trash2 size={15} />
                                 </button>
                             </div>
                         ))}
-                    </div>
-
-                    <div className="pt-8 border-t border-white/5 flex justify-end">
-                        <button
-                            type="submit"
-                            className="px-10 py-4 rounded-2xl bg-orange-500 hover:bg-orange-600 text-white font-black uppercase text-[10px] tracking-widest transition-all shadow-xl shadow-orange-500/20 flex items-center gap-2"
-                        >
-                            <Save size={18} /> Save Footer
-                        </button>
                     </div>
                 </form>
             </div>

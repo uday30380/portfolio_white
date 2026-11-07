@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion'; // eslint-disable-line no-unused-vars
+import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, X, ZoomIn, Image as ImageIcon } from 'lucide-react';
 
 const ProjectGallery = ({ images, title }) => {
@@ -44,7 +44,7 @@ const ProjectGallery = ({ images, title }) => {
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.3 }}
-                        src={imageArray[currentIndex]}
+                        src={imageArray[currentIndex]?.trim() ? imageArray[currentIndex] : null}
                         alt={`${title} - Image ${currentIndex + 1}`}
                         className="w-full h-[400px] object-contain cursor-pointer"
                         onClick={() => setShowLightbox(true)}
@@ -91,7 +91,7 @@ const ProjectGallery = ({ images, title }) => {
                                     }`}
                             >
                                 <img
-                                    src={img}
+                                    src={img?.trim() ? img : null}
                                     alt={`Thumbnail ${index + 1}`}
                                     className="w-full h-20 object-cover"
                                 />
@@ -134,7 +134,7 @@ const ProjectGallery = ({ images, title }) => {
                             key={currentIndex}
                             initial={{ scale: 0.9 }}
                             animate={{ scale: 1 }}
-                            src={imageArray[currentIndex]}
+                            src={imageArray[currentIndex]?.trim() ? imageArray[currentIndex] : null}
                             alt={`${title} - Image ${currentIndex + 1}`}
                             className="max-w-full max-h-[90vh] object-contain"
                             onClick={(e) => e.stopPropagation()}
@@ -171,3 +171,4 @@ const ProjectGallery = ({ images, title }) => {
 };
 
 export default ProjectGallery;
+

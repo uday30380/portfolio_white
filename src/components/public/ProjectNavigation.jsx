@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+﻿import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
+import { motion } from 'framer-motion';
 import { useData } from '../../context/DataContext';
 
 const ProjectNavigation = ({ currentProjectId }) => {
@@ -72,3 +72,4 @@ const ProjectNavigation = ({ currentProjectId }) => {
 };
 
 export default ProjectNavigation;
+

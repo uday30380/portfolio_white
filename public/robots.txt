@@ -1,3 +1,18 @@
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /login
+Disallow: /signup
 Sitemap: https://udaykiranportfolio.web.app/sitemap.xml
+Sitemap: https://udaykiranportfolio.web.app/sitemap-images.xml
+
+# Allow image and video bots explicitly
+User-agent: Googlebot-Image
+Allow: /
+
+User-agent: Googlebot-Video
+Allow: /
+
+User-agent: Bingbot
+Allow: /

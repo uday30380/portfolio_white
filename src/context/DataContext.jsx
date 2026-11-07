@@ -2,13 +2,9 @@ import { createContext, useContext, useState, useEffect } from 'react';
 import { db, auth } from '../firebase';
 import { doc, onSnapshot, setDoc } from 'firebase/firestore';
 import { useToast } from './ToastContext';
+import { sanitizeData } from '../utils/imageSanitizer';
 
 const STORAGE_KEY = 'portfolio_data_backup';
-
-const DataContext = createContext();
-
-// eslint-disable-next-line react-refresh/only-export-components
-export const useData = () => useContext(DataContext);
 
 // Initial Data Structure for Seeding/Fallback
 const initialData = {
@@ -17,7 +13,7 @@ const initialData = {
         tagline: "Entrepreneur · Designer · Developer · Digital Innovator",
         titles: ["Entrepreneur", "App Store Publisher", "Creative Director", "Full Stack Developer", "RPA Club Designer", "Provision Wing Lead"],
         intro: "I build, brand, and ship products that matter. From publishing apps on the Amazon App Store to leading university clubs and designing for real businesses — I turn ideas into impactful digital realities.",
-        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&w=800&q=80",
+        image: "/uday-portrait.png",
         btnPrimary: "See My Work",
         btnSecondary: "Let's Connect",
         expTitle: "Builder",
@@ -30,7 +26,7 @@ const initialData = {
         text1: "I'm Uday Kiran Vempati — a Computer Science student at KL University and a self-driven entrepreneur who doesn't wait for opportunities; I create them. I've published a mobile app on the Amazon App Store, led design teams at university clubs, and delivered real creative work for businesses — all while pursuing my degree.",
         text2: "I bridge the gap between technology and creativity. Whether it's architecting a Java backend, designing a visual identity for a brand, or leading a team of designers as Provision Wing Lead — I bring the same relentless drive to everything. I've competed in hackathons, collaborated with businesses like Eswar Gold & Silver, and been officially recognized by Canva for design excellence. My work spans software development, UI/UX, graphic design, branding, and entrepreneurship.",
         text3: "\"The best way to predict the future is to build it.\" — I live by this. Every project I take on is a bet on myself. I'm not just learning to be a developer — I'm becoming the person who ships products, leads teams, and creates value that lasts.",
-        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&w=800&q=80",
+        image: "/uday-portrait.png",
         stats: [
             { label: "Experience", value: "2+ Years" },
             { label: "Projects", value: "10+" },
@@ -58,145 +54,464 @@ const initialData = {
             skill: 'Creative Design & Branding',
             percentage: 100,
             description: "Expert-level visual designer — posters, brand identities, thumbnails, social media creatives, and cinematic aesthetics using Canva and professional tools. Recognized by Canva officially.",
-            iconName: 'Palette'
+            iconName: 'PenTool'
+        },
+        {
+            id: 4,
+            skill: 'Full Stack Web (React & Firebase)',
+            percentage: 92,
+            description: "Building responsive, modern, production web applications with React, Tailwind CSS, Firebase Firestore, Authentication, and Cloud Functions.",
+            iconName: 'Layout'
         }
     ],
     projects: [
         {
-            id: 1,
-            title: 'Digital File Organizer',
-            description: 'A production-grade Java desktop application that automatically manages, categorizes, deduplicates, and backs up your files — built with multithreading for blazing-fast performance.',
-            problem: "Cluttered file systems and lack of automated, intelligent backup solutions lead to data loss and wasted hours for power users and professionals.",
-            solution: "Engineered a multithreaded Java app with metadata indexing, smart duplicate detection, and full/incremental backup strategies using design patterns.",
-            outcome: "Reduced file organization time by 80% for users; achieved 100% data recovery potential through automated, intelligent backups.",
-            techUsed: ['Java', 'OOP', 'Multithreading', 'Design Patterns', 'Swing UI'],
-            tags: ['Java', 'Automation', 'Desktop App'],
-            level: 'Intermediate',
-            image: 'https://images.unsplash.com/photo-1555421689-d68471e189f2?fit=crop&w=400&q=80',
-            liveLink: 'https://github.com/',
-            githubLink: 'https://github.com/',
-            timeline: [
-                { date: 'Jan 2023', title: 'Research', description: 'User surveys and requirement analysis.' },
-                { date: 'Feb 2023', title: 'Prototype', description: 'Initial UI mockups and feedback.' },
-                { date: 'Mar 2023', title: 'Development', description: 'Core features implementation.' },
-                { date: 'Apr 2023', title: 'Beta Launch', description: 'Testing with pilot users.' },
-                { date: 'May 2023', title: 'Public Release', description: 'Full launch to all students.' }
-            ],
-            imageBefore: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?fit=crop&w=400&q=80',
-            imageAfter: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?fit=crop&w=400&q=80',
-            faqs: [
-                { q: 'What platforms does this support?', a: 'It runs on Windows, macOS, and Linux.' },
-                { q: 'Can I customize the backup schedule?', a: 'Yes, via the settings panel.' }
-            ],
-            rating: 4,
-            changelog: [
-                { version: '1.0.0', date: 'May 2023', changes: ['Initial public release', 'Basic file management', 'Multithreaded backups'] },
-                { version: '1.1.0', date: 'Aug 2023', changes: ['Metadata indexing improvement', 'Bug fixes in duplicate detection'] }
-            ],
-            contributors: [
-                { name: 'Uday Kiran', role: 'Lead Developer', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&w=100' }
-            ],
-            seo: 90,
-            validatedSkills: ['Java Development', 'Multithreading', 'Desktop UI Design'],
-            honorsAwards: [
-                { title: 'Best Academic Project', organization: 'CSE Dept', date: '2023' }
-            ],
-            snippets: [
-                { language: 'java', title: 'Backup Logic', code: 'public void performBackup() {\n  // Implementation here\n}' }
-            ]
+                "title": "SIMPLETASKS",
+                "validatedSkills": [],
+                "performance": {
+                        "seo": 78,
+                        "score": 99,
+                        "accessibility": 85,
+                        "loadTime": "1"
+                },
+                "image": "https://i.postimg.cc/hjqhzvLx/image.png",
+                "duration": "",
+                "snippets": [],
+                "changelog": [],
+                "metrics": {},
+                "level": "Advanced",
+                "honorsAwards": [
+                        {
+                                "title": "Recognition for Productivity Application Development",
+                                "date": "2026",
+                                "organization": "KL University (Dean of Academics)"
+                        },
+                        {
+                                "organization": "Amazon Appstore",
+                                "date": "2026",
+                                "title": "Application Published on Amazon Appstore"
+                        }
+                ],
+                "liveLink": "https://www.simpletasks.online",
+                "imagePath": "",
+                "faqs": [],
+                "featured": false,
+                "tags": [
+                        "anti gravity",
+                        "firebase",
+                        "react",
+                        "java script",
+                        "Web Development, Frontend, Productivity App, Task Management, UI/UX"
+                ],
+                "order": 0,
+                "problem": "Users often struggle to manage daily tasks effectively due to lack of simple and accessible tools. Many existing applications are overly complex for basic task tracking.",
+                "imageAfter": "https://i.postimg.cc/hjqhzvLx/image.png",
+                "githubLink": "https://github.com/uday30380/simple-to-do-list1.git",
+                "teamSize": "",
+                "techUsed": [
+                        "HTML, CSS, JavaScript, Local Storage"
+                ],
+                "description": "The Simple To-Do List is a lightweight and efficient task management web application designed to help users organize their daily activities. It provides a clean and intuitive interface where users can add, update, and delete tasks seamlessly.\n\nThe application focuses on simplicity and usability, allowing users to manage their tasks without distractions. It demonstrates core frontend development concepts such as DOM manipulation, event handling, and state management while ensuring a responsive design across devices.",
+                "status": "published",
+                "outcome": "Successfully built a functional and responsive application that improves productivity and task organization. It demonstrates strong understanding of frontend fundamentals and practical implementation skil",
+                "rating": 5,
+                "imageBefore": "https://i.postimg.cc/hjqhzvLx/image.png",
+                "contributors": [],
+                "id": 1767603981982,
+                "solution": "Developed a simple and user-friendly to-do list application that allows users to easily add, edit, and delete tasks. The application provides instant updates and ensures smooth interaction.",
+                "completionDate": "",
+                "timeline": []
         },
         {
-            id: 2,
-            title: 'Student Health & Wellness Platform',
-            description: 'A full-stack, React-powered web platform built to combat student burnout — featuring real-time health tracking, mental wellness resources, fitness analytics, and a personalized dashboard.',
-            problem: "Students under academic pressure consistently neglect their health, with no centralized, student-friendly platform to monitor or improve their wellness habits.",
-            solution: "Built a beautiful, responsive React app with Firebase real-time sync, Chart.js analytics, and curated wellness resources designed specifically for student life.",
-            outcome: "Improved student health awareness by providing actionable, data-driven insights in a platform they actually want to use.",
-            techUsed: ['React', 'Firebase', 'Tailwind', 'Chart.js', 'Framer Motion'],
-            tags: ['Health Tech', 'Web App', 'Analytics'],
-            level: 'Intermediate',
-            image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?fit=crop&w=400&q=80',
-            liveLink: 'https://github.com/',
-            githubLink: 'https://github.com/',
-            timeline: [
-                { date: 'Jan 2024', title: 'Concept', description: 'Initial project idea and requirements gathering.' },
-                { date: 'Feb 2024', title: 'Design', description: 'Architecture design and UI mockups.' },
-                { date: 'Mar 2024', title: 'Development', description: 'Core functionality implementation.' },
-                { date: 'Apr 2024', title: 'Testing', description: 'Bug fixing and performance tuning.' },
-                { date: 'May 2024', title: 'Release', description: 'Final deployment and documentation.' }
-            ],
-            imageBefore: 'https://images.unsplash.com/photo-1555421689-d68471e189f2?fit=crop&w=400&q=80',
-            imageAfter: 'https://images.unsplash.com/photo-1555421689-d68471e189f2?fit=crop&w=400&q=80',
-            faqs: [
-                { q: 'What platforms does this support?', a: 'It is a responsive web app — works on all devices.' },
-                { q: 'Is health data stored securely?', a: 'Yes, Firebase Security Rules protect all user data.' }
-            ],
-            rating: 4,
-            changelog: [
-                { version: '1.0.0', date: 'May 2024', changes: ['Stable release with health tracking', 'Mental wellness resources integration'] }
-            ],
-            contributors: [
-                { name: 'Uday Kiran', role: 'Full Stack Developer', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&w=100' }
-            ],
-            seo: 95,
-            validatedSkills: ['React Framework', 'Responsive Design', 'API Integration'],
-            honorsAwards: [
-                { title: 'Innovation Award', organization: 'HealthHack', date: '2024' }
-            ],
-            snippets: [
-                { language: 'javascript', title: 'Health tracker', code: 'const trackHealth = (data) => {\n  return calculateScore(data);\n}' }
-            ]
+                "githubLink": "https://github.com/uday30380/Eswar-gold-and-sliver.git",
+                "title": "ESWAR GOLD AND SLIVER",
+                "imageBefore": "https://i.postimg.cc/K8CtZYvH/Cinzel_(2).jpg",
+                "level": "Advanced",
+                "imageAfter": "https://i.postimg.cc/K8CtZYvH/Cinzel_(2).jpg",
+                "tags": [],
+                "id": 1767605520293,
+                "image": "https://i.postimg.cc/K8CtZYvH/Cinzel_(2).jpg",
+                "description": "ESWAR Gold and Silver is a trusted jewelry business offering high-quality gold and silver ornaments, known for purity, craftsmanship, and customer satisfaction.",
+                "techUsed": [],
+                "featured": false,
+                "liveLink": "https://eswar-gold-silver.web.app/"
         },
         {
-            id: 3,
-            title: 'CIP-AP Portal',
-            description: 'A secure, enterprise-grade government web portal engineered for the Crime Investigation Department of Andhra Pradesh — delivering structured digital resources with modern UX and rigorous security.',
-            problem: "Law enforcement personnel lacked a centralized, secure, and user-friendly digital interface to access critical resources and structured information efficiently.",
-            solution: "Designed and developed a role-based access portal with a React frontend, Node.js backend, and hardened security protocols tailored for government use.",
-            outcome: "Dramatically improved resource accessibility and operational efficiency for CID AP personnel with a secure, scalable platform.",
-            techUsed: ['React', 'Node.js', 'Security Protocols', 'Database', 'Role-Based Access'],
-            tags: ['GovTech', 'Full Stack', 'Security'],
-            level: 'Advanced',
-            image: 'https://images.unsplash.com/photo-1507721999472-8ed4421c4af2?fit=crop&w=400&q=80',
-            liveLink: 'https://github.com/',
-            githubLink: 'https://github.com/',
-            timeline: [
-                { date: 'Jun 2022', title: 'Planning', description: 'Stakeholder meetings and scope definition.' },
-                { date: 'Jul 2022', title: 'Design', description: 'Architecture and UI design.' },
-                { date: 'Aug 2022', title: 'Implementation', description: 'Core modules development.' },
-                { date: 'Sep 2022', title: 'Security Audit', description: 'Full security audits and penetration testing.' },
-                { date: 'Oct 2022', title: 'Deployment', description: 'Production rollout and handover.' }
-            ],
-            imageBefore: 'https://images.unsplash.com/photo-1507721999472-8ed4421c4af2?fit=crop&w=400&q=80',
-            imageAfter: 'https://images.unsplash.com/photo-1507721999472-8ed4421c4af2?fit=crop&w=400&q=80',
-            faqs: [
-                { q: 'Who can access the portal?', a: 'Authorized law enforcement personnel only, with role-based authentication.' },
-                { q: 'Is there a mobile version?', a: 'Fully responsive — optimized for tablets and field devices.' }
-            ],
-            rating: 4,
-            changelog: [
-                { version: '1.0.0', date: 'Oct 2022', changes: ['Portal deployment for CID AP', 'Secure resource management', 'Role-based access control'] }
-            ],
-            contributors: [
-                { name: 'Uday Kiran', role: 'Lead Developer & Security Analyst', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=crop&w=100' }
-            ],
-            seo: 85,
-            validatedSkills: ['Secure Portal Design', 'Node.js Backend', 'Information Architecture'],
-            honorsAwards: [
-                { title: 'Merit Certificate', organization: 'CID AP', date: '2022' }
-            ],
-            snippets: [
-                { language: 'javascript', title: 'Auth Guard', code: '// Role-based route protection\nfunction authGuard(role) {\n  return currentUser?.role === role;\n}' }
-            ]
+                "githubLink": "",
+                "imageAfter": "https://i.postimg.cc/dt78N91F/image.png",
+                "imageBefore": "https://i.postimg.cc/dt78N91F/image.png",
+                "title": "LOOT BAZZARE",
+                "level": "Advanced",
+                "tags": [
+                        "Full stack",
+                        "AI CSS",
+                        "Project no.1"
+                ],
+                "featured": false,
+                "id": 1768028656771,
+                "liveLink": "https://lootbazzare.vercel.app/",
+                "techUsed": [],
+                "image": "https://i.postimg.cc/dt78N91F/image.png",
+                "description": "LOOTBAZZARE"
+        },
+        {
+                "metrics": {},
+                "changelog": [],
+                "completionDate": "",
+                "tags": [
+                        "Firebase Firestore",
+                        "Postman, Git, GitHub"
+                ],
+                "featured": false,
+                "performance": {
+                        "accessibility": 0,
+                        "seo": 0,
+                        "loadTime": "",
+                        "score": 0
+                },
+                "liveLink": "https://rpa-club.web.app/",
+                "validatedSkills": [],
+                "imagePath": "",
+                "order": 0,
+                "duration": "",
+                "honorsAwards": [],
+                "snippets": [],
+                "outcome": "Successfully deployed a functional backend that supports smooth data flow, user management, and future scalability for club operations.",
+                "level": "Advanced",
+                "description": "A centralized web platform for the RPA Club at KL University to manage club activities, members, events, and administrative workflows efficiently.",
+                "rating": 5,
+                "id": 1770213463333,
+                "solution": "Designed and developed the backend architecture to handle authentication, database operations, API integrations, and secure data management for the club website.",
+                "imageAfter": "https://i.postimg.cc/Y9kXV9Jq/image.png",
+                "timeline": [],
+                "githubLink": "https://rpa-club.web.app/",
+                "imageBefore": "https://i.postimg.cc/Y9kXV9Jq/image.png",
+                "faqs": [],
+                "status": "published",
+                "title": "RPA Club Website",
+                "problem": "The club needed a scalable and secure platform to manage member data, events, and internal workflows digitally instead of manual processes.",
+                "contributors": [],
+                "techUsed": [
+                        "Firebase, REST APIs"
+                ],
+                "teamSize": "",
+                "image": "https://i.postimg.cc/Y9kXV9Jq/image.png"
+        },
+        {
+                "featured": false,
+                "honorsAwards": [
+                        {
+                                "title": "Successfully developed and deployed real-world client project Recognized for modern UI/UX design Built as part of portfolio showcasing real-world applications",
+                                "date": "24-03-2026",
+                                "organization": "Snackhub founder"
+                        }
+                ],
+                "liveLink": "https://snackhub.in/",
+                "imagePath": "",
+                "githubLink": "",
+                "rating": 5,
+                "imageAfter": "https://i.postimg.cc/02Wk6kR6/Orange_Modern_Fresh_Burger_Promotion_Poster.jpg",
+                "imageBefore": "https://i.postimg.cc/02Wk6kR6/Orange_Modern_Fresh_Burger_Promotion_Poster.jpg",
+                "status": "published",
+                "duration": "",
+                "snippets": [],
+                "description": "SnackHub is a food-based web platform designed to deliver a unique blend of traditional street food and modern gourmet presentation. The platform allows users to explore a wide variety of snacks including pizzas, cakes, burgers, Chinese items, shawarma, and beverages.\n\nThe idea behind SnackHub is to elevate street food by maintaining premium quality ingredients, hygienic preparation, and visually appealing UI/UX. The website provides a seamless browsing experience where users can explore menu items, understand the brand story, and interact with a modern interface.\n\nSnackHub was conceptualized with a strong focus on quality and customer satisfaction, ensuring all products are freshly prepared and delivered with consistency.",
+                "metrics": {},
+                "validatedSkills": [
+                        "Web Development UI/UX Design Frontend Development Firebase Integration Responsive Design"
+                ],
+                "changelog": [],
+                "id": 1774358842434,
+                "completionDate": "",
+                "tags": [
+                        "Food / Restaurant / Web Application"
+                ],
+                "order": 0,
+                "faqs": [],
+                "solution": "SnackHub provides a clean, visually appealing, and modern website that showcases street food as a premium experience with strong branding and user-friendly design.",
+                "problem": "Street food platforms often lack proper branding, hygiene representation, and modern UI/UX, making it difficult to attract premium customers.",
+                "timeline": [],
+                "contributors": [],
+                "level": "Advanced",
+                "teamSize": "",
+                "techUsed": [
+                        "HTML, CSS, JavaScript, Firebase"
+                ],
+                "performance": {
+                        "accessibility": 90,
+                        "loadTime": "1.5",
+                        "score": 85,
+                        "seo": 95
+                },
+                "image": "https://i.postimg.cc/02Wk6kR6/Orange_Modern_Fresh_Burger_Promotion_Poster.jpg",
+                "outcome": "Improved user engagement\nBetter visual representation of food items\nEnhanced brand identity\nEasy navigation and browsing experience",
+                "title": "SnackHub \u2013 Street Food Meets Gourmet Experience"
+        },
+        {
+                "validatedSkills": [
+                        "Frontend Development Responsive Design UI/UX Design Firebase Deployment Problem Solving AI-based Thinking Hackathon Execution"
+                ],
+                "title": "Max Life Safe Insurance",
+                "rating": 5,
+                "snippets": [],
+                "performance": {
+                        "seo": 80,
+                        "score": 98,
+                        "accessibility": 85,
+                        "loadTime": "1.5"
+                },
+                "changelog": [],
+                "duration": "",
+                "outcome": "\n\nSuccessfully built and deployed a functional web application during the Guidewire Hackathon. The project demonstrates the ability to solve real-world problems using technology, with a focus on user-centric design and social impact.",
+                "image": "https://i.postimg.cc/HsMK3LX1/image.png",
+                "faqs": [],
+                "status": "published",
+                "level": "Intermediate",
+                "honorsAwards": [
+                        {
+                                "organization": "Guidewire Software Company",
+                                "title": "Guidewire Hackathon \u2013 Participation Certificate",
+                                "date": "18-04-2026"
+                        }
+                ],
+                "featured": false,
+                "liveLink": "https://maxlife-safe-insurance.web.app/",
+                "completionDate": "",
+                "problem": "Gig workers depend on daily income and are highly vulnerable during natural disasters such as floods or cyclones. When such events occur, they are unable to work and often struggle to access food, shelter, and critical information.",
+                "imagePath": "",
+                "order": 0,
+                "tags": [
+                        "Web Development, Frontend, Hackathon Project, AI Assistance, Disaster Management, Gig Workers, UI/UX"
+                ],
+                "description": "Short Description\n\nAn AI-powered assistance platform designed to support gig workers during natural disasters by providing essential guidance, resources, and survival support.\n\nNarrative Description\n\nMax Life Safe Assistance is a web-based application developed during the Guidewire Hackathon to address a real-world problem faced by gig workers. During emergencies such as floods, cyclones, or other natural disasters, gig workers often lose access to income and basic necessities.\n\nThis platform uses an AI-driven assistance approach to guide users during such critical situations. It helps them find nearby resources, essential support, and survival guidance to avoid situations like hunger, lack of shelter, or isolation. The application focuses on accessibility, simplicity, and quick response, ensuring that users can rely on it during high-risk conditions.",
+                "metrics": {},
+                "techUsed": [
+                        "HTML, CSS, JavaScript, Firebase Hosting, SVG"
+                ],
+                "teamSize": "",
+                "imageBefore": "https://i.postimg.cc/HsMK3LX1/image.png",
+                "imageAfter": "https://i.postimg.cc/HsMK3LX1/image.png",
+                "id": 1776575439303,
+                "githubLink": "https://github.com/uday30380/maxlife-safe-insurance.git",
+                "timeline": [],
+                "contributors": [],
+                "solution": "Developed an AI-powered assistance platform that helps gig workers during emergencies by providing guidance, support resources, and essential information. The system is designed to be simple, fast, and accessible, even under stressful conditions.\n\n"
+        },
+        {
+                "id": 1787658988434,
+                "teamSize": "",
+                "techUsed": [],
+                "imageBefore": "https://i.postimg.cc/TPpgLSdr/image.png",
+                "validatedSkills": [],
+                "level": "Intermediate",
+                "problem": "",
+                "tags": [],
+                "completionDate": "",
+                "imagePath": "",
+                "timeline": [],
+                "solution": "",
+                "title": "Prime App Connect ",
+                "imageAfter": "https://i.postimg.cc/TPpgLSdr/image.png",
+                "outcome": "",
+                "changelog": [],
+                "contributors": [],
+                "githubLink": "",
+                "description": "Agency",
+                "image": "https://i.postimg.cc/TPpgLSdr/image.png",
+                "rating": 5,
+                "snippets": [],
+                "duration": "",
+                "liveLink": "https://www.primeappconnect.com/",
+                "featured": false,
+                "faqs": [],
+                "order": 0,
+                "metrics": {},
+                "honorsAwards": [],
+                "performance": {
+                        "loadTime": "",
+                        "score": 0,
+                        "seo": 0,
+                        "accessibility": 0
+                },
+                "status": "published"
+        },
+        {
+                "completionDate": "",
+                "imageAfter": "https://i.ibb.co/hFJHNxz1/images.png",
+                "description": "CSE STUDENT BODY\n",
+                "order": 0,
+                "githubLink": "",
+                "featured": false,
+                "liveLink": "https://klfocus.in/",
+                "metrics": {},
+                "faqs": [],
+                "honorsAwards": [],
+                "snippets": [],
+                "duration": "",
+                "imageBefore": "https://i.ibb.co/hFJHNxz1/images.png",
+                "id": 1789178082570,
+                "performance": {
+                        "loadTime": "",
+                        "accessibility": 0,
+                        "seo": 0,
+                        "score": 0
+                },
+                "status": "published",
+                "changelog": [],
+                "title": "Focus(Student Body Website)",
+                "timeline": [],
+                "image": "https://i.ibb.co/hFJHNxz1/images.png",
+                "outcome": "",
+                "tags": [
+                        "Student body",
+                        "Focus"
+                ],
+                "solution": "",
+                "contributors": [],
+                "level": "Intermediate",
+                "validatedSkills": [],
+                "imagePath": "",
+                "rating": 5,
+                "problem": "",
+                "teamSize": "",
+                "techUsed": [
+                        "Java",
+                        "react",
+                        "tawlind css"
+                ]
+        },
+        {
+                "solution": "",
+                "performance": {
+                        "score": 0,
+                        "accessibility": 0,
+                        "loadTime": "",
+                        "seo": 0
+                },
+                "timeline": [],
+                "outcome": "",
+                "honorsAwards": [],
+                "teamSize": "",
+                "techUsed": [],
+                "tags": [],
+                "problem": "",
+                "validatedSkills": [],
+                "order": 0,
+                "githubLink": "",
+                "description": "Project No.6",
+                "imageAfter": "https://i.ibb.co/ccfRfJCB/Screenshot-2026-09-15-172158.png",
+                "featured": false,
+                "metrics": {},
+                "liveLink": "https://www.srivenkataramanajyothishyam.in/",
+                "id": 1789473150299,
+                "level": "Intermediate",
+                "faqs": [],
+                "changelog": [],
+                "completionDate": "",
+                "rating": 5,
+                "duration": "",
+                "image": "https://i.ibb.co/ccfRfJCB/Screenshot-2026-09-15-172158.png",
+                "status": "published",
+                "contributors": [],
+                "snippets": [],
+                "title": "SRI VENKATARAMANA JYOTHISHYA PEETHAM",
+                "imageBefore": "https://i.ibb.co/ccfRfJCB/Screenshot-2026-09-15-172158.png",
+                "imagePath": ""
+        },
+        {
+                "snippets": [],
+                "imagePath": "",
+                "duration": "",
+                "imageBefore": "https://i.ibb.co/RpqmZy8q/Screenshot-2026-09-24-215726.png",
+                "level": "Intermediate",
+                "contributors": [],
+                "validatedSkills": [],
+                "metrics": {},
+                "featured": false,
+                "changelog": [],
+                "image": "https://i.ibb.co/RpqmZy8q/Screenshot-2026-09-24-215726.png",
+                "liveLink": "https://referx.in/",
+                "title": "Referx",
+                "faqs": [],
+                "description": "System Workflow\nWhatsApp Automation \u2192 Tasks \u2192 Referrals \u2192 Earnings \u2192 Withdrawal\nA transparent, unified software workflow built for reliability and real performance tracking.",
+                "githubLink": "",
+                "imageAfter": "https://i.ibb.co/RpqmZy8q/Screenshot-2026-09-24-215726.png",
+                "status": "published",
+                "tags": [],
+                "teamSize": "",
+                "techUsed": [],
+                "id": 1790267301518,
+                "outcome": "",
+                "honorsAwards": [],
+                "timeline": [],
+                "completionDate": "",
+                "solution": "",
+                "order": 0,
+                "performance": {
+                        "loadTime": "",
+                        "score": 0,
+                        "seo": 0,
+                        "accessibility": 0
+                },
+                "problem": "",
+                "rating": 5
+        },
+        {
+                "honorsAwards": [],
+                "imageAfter": "https://i.ibb.co/NnYzdRwN/Screenshot-2026-10-11-140613.png",
+                "problem": "",
+                "status": "published",
+                "timeline": [],
+                "githubLink": "",
+                "imageBefore": "https://i.ibb.co/NnYzdRwN/Screenshot-2026-10-11-140613.png",
+                "solution": "",
+                "changelog": [],
+                "id": 1791707894681,
+                "description": "SAMYAK is the premier annual National Level Techno-Management Fest of Koneru Lakshmaiah Education Foundation (KL University). Born as a beacon of student-driven ambition, it unites visionary engineers, artists, strategists, and gamers in a 3-day immersive odyssey.",
+                "rating": 5,
+                "faqs": [],
+                "outcome": "",
+                "order": 0,
+                "validatedSkills": [],
+                "teamSize": "",
+                "techUsed": [
+                        "REACT",
+                        "JAVASCRIPT",
+                        "FIREBASE",
+                        "CLOUDFARE"
+                ],
+                "imagePath": "",
+                "contributors": [],
+                "tags": [
+                        "KL UNIVERSITY",
+                        "KLU",
+                        "SAMYAK2026",
+                        "WEBSITE CHEIF"
+                ],
+                "level": "Intermediate",
+                "liveLink": "http://klsamyak.in/",
+                "featured": false,
+                "completionDate": "",
+                "image": "https://i.ibb.co/NnYzdRwN/Screenshot-2026-10-11-140613.png",
+                "performance": {
+                        "seo": 0,
+                        "accessibility": 0,
+                        "score": 0,
+                        "loadTime": ""
+                },
+                "title": "SAMYAK 2026",
+                "snippets": [],
+                "metrics": {},
+                "duration": ""
         }
-    ],
+],
     testimonials: [
         {
             id: 1,
             name: "ESWAR GOLD AND SILVER",
             role: "Brand Collaboration",
             company: "ESWAR GOLD AND SILVER",
-            avatar: "https://images.unsplash.com/photo-1599566150163-29194dcaad36?fit=crop&w=100",
+            avatar: "/uday-portrait.png",
             text: "We collaborated with Uday Kiran from Vempati Creations for our cover song poster designs, and we were truly impressed by his creativity, attention to detail, and unique visual style. His designs captured the essence of our project perfectly. A true creative professional."
         }
     ],
@@ -273,6 +588,30 @@ const initialData = {
     certificates: [],
     honors: [],
     validatedSkills: [],
+    btechJourney: {
+        sectionTitle: '4 Years of Building & Growing',
+        sectionSubtitle: 'Every session, every event, every moment of hustle — captured and preserved. This is my B.Tech story at KL University.',
+        highlights: [
+            {
+                id: 1,
+                title: 'Firebase Session – RPA Club',
+                description: 'An exciting Firebase workshop session conducted under the RPA Club at KL University. Deep dive into Firebase Realtime Database and Authentication.',
+                url: '/firebase-session-rpa-club.mp4',
+                type: 'local-video',
+                year: 'Year 2',
+                isShort: false,
+            },
+            {
+                id: 2,
+                title: 'Focus Under Pressure',
+                description: 'Documenting the journey of staying focused and delivering under academic pressure. Every deadline, every late night, every win.',
+                url: '/focus-under.mp4',
+                type: 'local-video',
+                year: 'Year 2',
+                isShort: false,
+            },
+        ]
+    },
     blog: [
         {
             id: 1,
@@ -281,16 +620,29 @@ const initialData = {
             content: `# From Student to Entrepreneur: Publishing My First App on Amazon\n\nMost people wait. I decided to build.\n\nAs a second-year Computer Science student, I set out to do something most of my peers hadn't attempted — publish a real product on the Amazon App Store.\n\n## The Idea\n\nIt started with a problem I noticed. A gap that no existing app was filling well enough. Instead of complaining about it, I opened my IDE and started building.\n\n## The Build\n\nBuilding solo is humbling. You're the developer, the designer, the QA tester, and the product manager — all at once. There were nights of debugging, redesigns, and moments of self-doubt. But also moments of pure flow where the code just worked.\n\n## The Launch\n\nSubmitting to the Amazon App Store was a milestone. Seeing my app live — available to anyone in the world — was one of the proudest moments of my life so far.\n\n## What I Learned\n\nEntrepreneurship isn't about waiting to be ready. It's about starting before you feel ready, learning from every mistake, and shipping anyway.\n\n## Conclusion\n\nIf you have an idea, build it. The best time to start was yesterday. The second best time is right now.`,
             date: "January 2026",
             readTime: "6 min read",
-            image: "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=1000",
+            image: "/uday-portrait.png",
             images: [
-                "https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=1000",
-                "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?auto=format&fit=crop&q=80&w=1000",
-                "https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?auto=format&fit=crop&q=80&w=1000"
+                "/uday-portrait.png"
             ],
             tags: ["Entrepreneurship", "App Development", "Amazon", "Student Life"],
             author: "Uday Kiran Vempati"
         }
     ]
+};
+
+const defaultContextValue = {
+    data: initialData,
+    loading: false,
+    updateData: async () => {},
+    resetData: async () => {}
+};
+
+const DataContext = createContext(defaultContextValue);
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const useData = () => {
+    const context = useContext(DataContext);
+    return context || defaultContextValue;
 };
 
 export const DataProvider = ({ children }) => {
@@ -307,9 +659,9 @@ export const DataProvider = ({ children }) => {
             if (loading) {
                 console.warn("⚠️ DataContext: Loading timed out. Forcing app load with fallback data.");
                 setLoading(false);
-                showToast('Database Connection Slow - Loaded Offline Data', 'info');
+                showToast('Loaded Offline Data', 'info');
             }
-        }, 8000);
+        }, 2500);
 
         try {
             const docRef = doc(db, "content", "portfolioData");
@@ -319,6 +671,13 @@ export const DataProvider = ({ children }) => {
                     if (docSnap.exists()) {
                         console.log("✅ Data successfully fetched from Firestore!");
                         const cloudData = docSnap.data();
+                        const cleanedCloudData = sanitizeData(cloudData);
+
+                        // If Firestore stored old stock/AI images, purge them immediately
+                        if (JSON.stringify(cloudData) !== JSON.stringify(cleanedCloudData)) {
+                            console.log("🧹 Purging stock images from Firestore...");
+                            setDoc(docRef, cleanedCloudData, { merge: true }).catch(err => console.warn("Auto-clean Firestore:", err));
+                        }
 
                         // Conflict Resolution: Prefer the NEWER data
                         const localBackup = localStorage.getItem(STORAGE_KEY);
@@ -328,21 +687,19 @@ export const DataProvider = ({ children }) => {
                         }
 
                         // Determine timestamp priority
-                        const cloudTime = cloudData.lastModified || 0;
+                        const cloudTime = cleanedCloudData.lastModified || 0;
                         const localTime = localData?.lastModified || 0;
 
                         if (cloudTime > localTime) {
                             console.log("☁️ Cloud is newer. Updating app.");
-                            setData(prev => ({ ...prev, ...cloudData }));
-                            localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...data, ...cloudData }));
+                            setData(prev => sanitizeData({ ...prev, ...cleanedCloudData }));
+                            localStorage.setItem(STORAGE_KEY, JSON.stringify(sanitizeData({ ...data, ...cleanedCloudData })));
                         } else if (localTime > cloudTime) {
                             console.warn("💾 Local is newer. Ignoring stale cloud data (pending sync).");
-                            // We keep local state. Optionally, we could try to push local to cloud here.
-                            if (localData) setData(localData);
+                            if (localData) setData(sanitizeData(localData));
                             showToast('Using Newer Local Data (Cloud Sync Pending)', 'info');
                         } else {
-                            // Equal or no timestamps, merge safely
-                            setData(prev => ({ ...prev, ...cloudData }));
+                            setData(prev => sanitizeData({ ...prev, ...cleanedCloudData }));
                         }
                     } else {
                         console.log("⚠️ Document missing. Checking Local Backup...");
@@ -351,11 +708,10 @@ export const DataProvider = ({ children }) => {
                         if (localBackup) {
                             console.log("Found Local Backup - Restoring...");
                             const parsed = JSON.parse(localBackup);
-                            setData(parsed);
+                            setData(sanitizeData(parsed));
                             showToast('Restored Data from Local Backup', 'success');
                         } else {
                             console.log("No backup found. Using defaults.");
-                            // Existing auto-seed logic (Disabled)
                             if (auth.currentUser) {
                                 console.warn("Auto-seeding disabled.");
                                 showToast('New Database - Please Save Settings', 'info');

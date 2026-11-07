@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
+import { motion } from 'framer-motion';
 import { Play, Laptop, Smartphone, Tablet, X, Maximize2 } from 'lucide-react';
 
 const LiveDemoEmbed = ({ url, title }) => {
@@ -99,7 +99,7 @@ const LiveDemoEmbed = ({ url, title }) => {
                         {/* Iframe */}
                         <div className="aspect-video bg-white">
                             <iframe
-                                src={url}
+                                src={url?.trim() ? url : null}
                                 title={title}
                                 className="w-full h-full border-none"
                                 loading="lazy"
@@ -117,3 +117,4 @@ const LiveDemoEmbed = ({ url, title }) => {
 };
 
 export default LiveDemoEmbed;
+

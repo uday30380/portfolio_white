@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
+﻿import React from 'react';
+import { motion } from 'framer-motion';
 import { ShieldCheck, Zap, Star, Layout, BadgeCheck, Info, History, Scale } from 'lucide-react';
 
 const ProjectBadges = ({ version = '1.0.0', status = 'Live', license = 'MIT' }) => {
@@ -16,9 +16,9 @@ const ProjectBadges = ({ version = '1.0.0', status = 'Live', license = 'MIT' }) 
             icon: History,
             label: 'Version',
             value: `v${version}`,
-            color: 'from-blue-500/20 to-indigo-500/20',
-            textColor: 'text-blue-400',
-            borderColor: 'border-blue-500/30'
+            color: 'text-[#4B5F5C]/20 to-indigo-500/20',
+            textColor: 'text-[#8A9B98]',
+            borderColor: 'border-[#DDE7E5]'
         },
         {
             icon: Scale,
@@ -68,3 +68,4 @@ const ProjectBadges = ({ version = '1.0.0', status = 'Live', license = 'MIT' }) 
 };
 
 export default ProjectBadges;
+

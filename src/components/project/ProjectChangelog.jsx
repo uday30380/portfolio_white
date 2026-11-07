@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
+﻿import React from 'react';
+import { motion } from 'framer-motion';
 import { History, GitCommit, ArrowUpCircle, PlusCircle, CheckCircle2, ArrowRightCircle } from 'lucide-react';
 
 const ProjectChangelog = ({ changelog = [] }) => {
@@ -61,3 +61,4 @@ const ProjectChangelog = ({ changelog = [] }) => {
 };
 
 export default ProjectChangelog;
+

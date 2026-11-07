@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
+﻿import React from 'react';
+import { motion } from 'framer-motion';
 import { FileDown, Printer, FileText, Code } from 'lucide-react';
 
 const ExportProject = ({ project, url }) => {
@@ -60,7 +60,7 @@ ${project.githubLink ? `- Source Code: ${project.githubLink}` : ''}
             label: 'Print / PDF',
             action: exportAsPDF,
             description: 'Print or save as PDF',
-            color: 'from-blue-500 to-blue-600'
+            color: 'text-[#4B5F5C] text-[#4B5F5C]'
         },
         {
             icon: FileText,
@@ -129,3 +129,4 @@ ${project.githubLink ? `- Source Code: ${project.githubLink}` : ''}
 };
 
 export default ExportProject;
+

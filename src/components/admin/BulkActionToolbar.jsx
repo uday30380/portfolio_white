@@ -1,5 +1,5 @@
 import React from 'react';
-import { Trash2, Star, Eye, EyeOff, X, Archive, CheckCircle2, XCircle, MoreVertical } from 'lucide-react';
+import { Trash2, Star, Eye, EyeOff, X } from 'lucide-react';
 
 const BulkActionToolbar = ({
     selectedCount,
@@ -13,84 +13,83 @@ const BulkActionToolbar = ({
     if (selectedCount === 0) return null;
 
     return (
-        <motion.div
-            initial={{ y: 100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 100, opacity: 0 }}
-            className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50"
-        >
-            <div className="bg-[#0F0F0F] backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-4 flex items-center gap-4">
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50">
+            <div className="bg-white border border-[#DDE7E5] rounded-[12px] shadow-lg p-3 flex items-center gap-3">
                 {/* Selection Count */}
-                <div className="flex items-center gap-2 px-4 py-2 bg-orange-500/20 rounded-xl">
-                    <span className="text-orange-500 font-black text-sm">
-                        {selectedCount} Selected
+                <div className="px-2.5 py-1 bg-[#EEF4F3] rounded-[6px]">
+                    <span className="text-[#102A28] font-semibold text-xs">
+                        {selectedCount} selected
                     </span>
                 </div>
 
-                {/* Divider */}
-                <div className="w-px h-8 bg-white/10" />
+                <div className="w-px h-5 bg-[#DDE7E5]" />
 
                 {/* Actions */}
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5">
                     <button
+                        type="button"
                         onClick={onBulkFeature}
-                        className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-orange-500 text-gray-400 hover:text-white rounded-xl transition-all font-bold text-sm"
-                        title="Feature Selected"
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-[#F7FAFA] hover:bg-[#EEF4F3] text-[#102A28] rounded-[6px] border border-[#DDE7E5] text-xs font-medium transition-colors"
+                        title="Feature selected"
                     >
-                        <Star size={16} />
+                        <Star size={14} className="text-[#102A28]" />
                         <span className="hidden sm:inline">Feature</span>
                     </button>
 
                     <button
+                        type="button"
                         onClick={onBulkUnfeature}
-                        className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-gray-500 text-gray-400 hover:text-white rounded-xl transition-all font-bold text-sm"
-                        title="Unfeature Selected"
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-[#F7FAFA] hover:bg-[#EEF4F3] text-[#4B5F5C] rounded-[6px] border border-[#DDE7E5] text-xs font-medium transition-colors"
+                        title="Unfeature selected"
                     >
-                        <Star size={16} />
+                        <Star size={14} />
                         <span className="hidden sm:inline">Unfeature</span>
                     </button>
 
                     <button
+                        type="button"
                         onClick={onBulkPublish}
-                        className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-green-500 text-gray-400 hover:text-white rounded-xl transition-all font-bold text-sm"
-                        title="Publish Selected"
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-[#F7FAFA] hover:bg-[#EEF4F3] text-[#15803D] rounded-[6px] border border-[#DDE7E5] text-xs font-medium transition-colors"
+                        title="Publish selected"
                     >
-                        <Eye size={16} />
+                        <Eye size={14} />
                         <span className="hidden sm:inline">Publish</span>
                     </button>
 
                     <button
+                        type="button"
                         onClick={onBulkDraft}
-                        className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-yellow-500 text-gray-400 hover:text-white rounded-xl transition-all font-bold text-sm"
-                        title="Draft Selected"
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-[#F7FAFA] hover:bg-[#EEF4F3] text-[#4B5F5C] rounded-[6px] border border-[#DDE7E5] text-xs font-medium transition-colors"
+                        title="Draft selected"
                     >
-                        <EyeOff size={16} />
+                        <EyeOff size={14} />
                         <span className="hidden sm:inline">Draft</span>
                     </button>
 
                     <button
+                        type="button"
                         onClick={onBulkDelete}
-                        className="flex items-center gap-2 px-4 py-2 bg-white/5 hover:bg-red-500 text-gray-400 hover:text-white rounded-xl transition-all font-bold text-sm"
-                        title="Delete Selected"
+                        className="flex items-center gap-1.5 px-3 py-1.5 bg-[#FEF2F2] hover:bg-red-100 text-[#DC2626] rounded-[6px] border border-[#FCA5A5] text-xs font-medium transition-colors"
+                        title="Delete selected"
                     >
-                        <Trash2 size={16} />
+                        <Trash2 size={14} />
                         <span className="hidden sm:inline">Delete</span>
                     </button>
                 </div>
 
-                {/* Divider */}
-                <div className="w-px h-8 bg-white/10" />
+                <div className="w-px h-5 bg-[#DDE7E5]" />
 
                 {/* Clear Selection */}
                 <button
+                    type="button"
                     onClick={onClearSelection}
-                    className="p-2 hover:bg-white/10 text-gray-400 hover:text-white rounded-xl transition-all"
-                    title="Clear Selection"
+                    className="p-1.5 hover:bg-[#EEF4F3] text-[#8A9B98] hover:text-[#0F766E] rounded-[6px] transition-colors"
+                    title="Clear selection"
                 >
-                    <X size={20} />
+                    <X size={16} />
                 </button>
             </div>
-        </motion.div>
+        </div>
     );
 };
 

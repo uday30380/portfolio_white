@@ -1,107 +1,71 @@
 import React from 'react';
 import { useData } from '../../context/DataContext';
-import { Quote, Star } from 'lucide-react';
-import { motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
+
+const defaultTestimonials = [
+    {
+        id: 1,
+        quote: "We collaborated with Uday Kiran from Vempati Creations for our brand and cover song poster designs. We were truly impressed by his attention to detail, visual balance, and distinct creative direction. A true professional.",
+        author: "ESWAR GOLD AND SILVER",
+        role: "Brand Collaboration Client"
+    },
+    {
+        id: 2,
+        quote: "Uday brings a rare mix of strong technical discipline and creative vision to our university club initiatives. When he takes on a project, you know it will ship cleanly and look exceptional.",
+        author: "FOCUS Club Executive Team",
+        role: "KL University"
+    },
+    {
+        id: 3,
+        quote: "Always dependable under deadlines. His ability to build multithreaded software and immediately translate requirements into working code made a real difference in our technical projects.",
+        author: "RPA Club Faculty & Peers",
+        role: "Engineering Collaboration"
+    }
+];
 
 const Testimonials = () => {
-    const { data } = useData();
+    const { data } = useData() || {};
+
+    const list = (data?.testimonials && data.testimonials.length > 0)
+        ? data.testimonials.slice(0, 3).map((t, idx) => ({
+            id: t.id || idx,
+            quote: t.text || t.quote,
+            author: t.name || t.author || 'Collaborator',
+            role: [t.role, t.company].filter(Boolean).join(', ') || 'Client'
+        }))
+        : defaultTestimonials;
 
     return (
-        <section id="testimonials" className="py-32 bg-[#0A0A0A] relative overflow-hidden">
-            {/* Background Accent */}
-            <motion.div
-                animate={{
-                    scale: [1, 1.2, 1.1, 1],
-                    rotate: [0, 90, 180, 270, 360],
-                    opacity: [0.3, 0.5, 0.4, 0.3]
-                }}
-                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-tr from-orange-500/10 to-transparent rounded-full blur-[150px] pointer-events-none -z-10"
-            ></motion.div>
-
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <div className="text-center mb-24">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        className="flex items-center justify-center gap-3 mb-8"
-                    >
-                        <div className="w-10 h-[2px] bg-orange-500"></div>
-                        <span className="text-sm font-bold tracking-[0.2em] text-orange-500 uppercase">Testimonials</span>
-                    </motion.div>
-                    <motion.h2
-                        initial={{ opacity: 0, y: 40 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8, ease: "easeOut" }}
-                        className="text-5xl md:text-8xl font-black text-white leading-tight uppercase tracking-tighter"
-                    >
-                        Success <span className="text-orange-500 text-stroke inline-block origin-bottom hover:scale-110 transition-transform cursor-default">Stories</span>
-                    </motion.h2>
+        <section id="testimonials" className="py-16 md:py-24 bg-[#EEF4F3] border-t border-[#DDE7E5]">
+            <div className="max-w-[1100px] mx-auto px-6">
+                <div className="mb-12">
+                    <h2 className="text-2xl md:text-3xl font-semibold text-[#102A28] mb-3">
+                        Testimonials
+                    </h2>
+                    <p className="text-base text-[#4B5F5C] max-w-[620px]">
+                        What clients, mentors, and teammates say about working with me.
+                    </p>
                 </div>
 
-                <div className="max-w-5xl mx-auto">
-                    {(data?.testimonials || []).map((testimonial, idx) => (
-                        <motion.div
-                            initial={{ opacity: 0, y: 50, scale: 0.9 }}
-                            whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                            viewport={{ once: true, margin: "-100px" }}
-                            transition={{ duration: 0.7, delay: idx * 0.2 }}
-                            whileHover={{ y: -10, borderColor: "rgba(249, 115, 68, 0.3)" }}
-                            key={testimonial.id}
-                            className="bg-[#111111] p-12 md:p-24 rounded-[60px] border border-white/5 relative group overflow-hidden shadow-2xl hover:shadow-orange-500/10 transition-all duration-500"
+                {/* Static Grid (No carousel) */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {list.map((item) => (
+                        <div
+                            key={item.id}
+                            className="bg-[#FFFFFF] border border-[#DDE7E5] rounded-xl p-6 shadow-sm hover:border-[#7CC7BD] hover:-translate-y-0.5 transition-all duration-200 flex flex-col justify-between"
                         >
-                            {/* Decorative Quote Mark */}
-                            <Quote className="absolute top-12 right-12 text-orange-500 opacity-10 group-hover:opacity-20 transition-opacity duration-700 transform group-hover:rotate-12" size={120} />
-                            <div className="absolute inset-0 bg-gradient-to-r from-orange-500/0 via-orange-500/0 to-orange-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                            <p className="text-base text-[#4B5F5C] leading-relaxed mb-6 italic">
+                                "{item.quote}"
+                            </p>
 
-                            <div className="relative z-10">
-                                <motion.div
-                                    initial={{ opacity: 0, x: -20 }}
-                                    whileInView={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: 0.3 }}
-                                    className="flex gap-1 mb-10 text-orange-500"
-                                >
-                                    {[...Array(5)].map((_, i) => (
-                                        <motion.div
-                                            key={i}
-                                            initial={{ opacity: 0, scale: 0 }}
-                                            whileInView={{ opacity: 1, scale: 1 }}
-                                            transition={{ delay: 0.4 + (i * 0.05) }}
-                                        >
-                                            <Star size={16} fill="currentColor" />
-                                        </motion.div>
-                                    ))}
-                                </motion.div>
-
-                                <motion.p
-                                    initial={{ opacity: 0 }}
-                                    whileInView={{ opacity: 1 }}
-                                    transition={{ delay: 0.4 }}
-                                    className="text-2xl md:text-4xl font-bold text-white leading-[1.4] mb-16 tracking-tight group-hover:text-gray-100 transition-colors"
-                                >
-                                    "{testimonial.text}"
-                                </motion.p>
-
-                                <div className="flex flex-col md:flex-row md:items-center gap-8 pt-12 border-t border-white/5">
-                                    <motion.div
-                                        whileHover={{ scale: 1.1, rotate: 5 }}
-                                        className="w-24 h-24 rounded-[32px] overflow-hidden shadow-2xl ring-4 ring-orange-500/10 group-hover:ring-orange-500/20 transition-all duration-500 aspect-square"
-                                    >
-                                        <img src={testimonial.avatar} alt={testimonial.name} className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700" />
-                                    </motion.div>
-                                    <div className="space-y-2">
-                                        <h4 className="text-2xl font-black text-white uppercase tracking-tighter">{testimonial.name}</h4>
-                                        <p className="text-orange-500 font-black text-[10px] uppercase tracking-[0.3em] flex items-center gap-3">
-                                            {testimonial.role}
-                                            <span className="w-4 h-[1px] bg-white/20"></span>
-                                            {testimonial.company}
-                                        </p>
-                                    </div>
+                            <div className="pt-4 border-t border-[#DDE7E5]">
+                                <div className="text-sm font-semibold text-[#102A28]">
+                                    {item.author}
+                                </div>
+                                <div className="text-xs text-[#8A9B98]">
+                                    {item.role}
                                 </div>
                             </div>
-                        </motion.div>
+                        </div>
                     ))}
                 </div>
             </div>

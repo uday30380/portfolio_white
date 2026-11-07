@@ -96,8 +96,8 @@ const SocialShareManager = ({ project, url, onShareComplete }) => {
             icon: Linkedin,
             label: 'LinkedIn',
             action: shareToLinkedIn,
-            color: 'from-blue-600 to-blue-700',
-            hoverColor: 'hover:shadow-blue-500/30'
+            color: 'text-[#4B5F5C] text-[#4B5F5C]',
+            hoverColor: 'hover:bg-[#EEF4F3]'
         },
         {
             icon: Twitter,
@@ -110,8 +110,8 @@ const SocialShareManager = ({ project, url, onShareComplete }) => {
             icon: Facebook,
             label: 'Facebook',
             action: shareToFacebook,
-            color: 'from-blue-500 to-blue-600',
-            hoverColor: 'hover:shadow-blue-500/30'
+            color: 'text-[#4B5F5C] text-[#4B5F5C]',
+            hoverColor: 'hover:bg-[#EEF4F3]'
         },
         {
             icon: MessageCircle,
@@ -124,8 +124,8 @@ const SocialShareManager = ({ project, url, onShareComplete }) => {
             icon: Send,
             label: 'Telegram',
             action: shareToTelegram,
-            color: 'from-blue-400 to-blue-500',
-            hoverColor: 'hover:shadow-blue-400/30'
+            color: 'text-[#4B5F5C] text-[#4B5F5C]',
+            hoverColor: 'hover:bg-[#EEF4F3]'
         },
         {
             icon: Hash,

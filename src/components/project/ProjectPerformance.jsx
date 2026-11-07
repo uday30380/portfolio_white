@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
+﻿import React from 'react';
+import { motion } from 'framer-motion';
 import { Zap, Shield, Search, Accessibility } from 'lucide-react';
 
 const ProjectPerformance = ({ scores = {} }) => {
@@ -13,7 +13,7 @@ const ProjectPerformance = ({ scores = {} }) => {
 
     const metrics = [
         { label: 'Performance', score: displayScores.performance, icon: Zap, color: 'text-green-500', barColor: 'bg-green-500' },
-        { label: 'Accessibility', score: displayScores.accessibility, icon: Accessibility, color: 'text-blue-500', barColor: 'bg-blue-500' },
+        { label: 'Accessibility', score: displayScores.accessibility, icon: Accessibility, color: 'text-[#4B5F5C]', barColor: 'text-[#4B5F5C]' },
         { label: 'Best Practices', score: displayScores.bestPractices, icon: Shield, color: 'text-purple-500', barColor: 'bg-purple-500' },
         { label: 'SEO', score: displayScores.seo, icon: Search, color: 'text-orange-500', barColor: 'bg-orange-500' }
     ];
@@ -101,3 +101,4 @@ const ProjectPerformance = ({ scores = {} }) => {
 };
 
 export default ProjectPerformance;
+

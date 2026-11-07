@@ -60,7 +60,7 @@ const BeforeAfterSlider = ({ before, after }) => {
                 {/* After Image (Background) */}
                 <div className="absolute inset-0">
                     <img
-                        src={after}
+                        src={after?.trim() ? after : null}
                         alt="After transformation"
                         className="w-full h-full object-cover"
                         draggable="false"
@@ -76,7 +76,7 @@ const BeforeAfterSlider = ({ before, after }) => {
                     style={{ width: `${sliderPosition}%` }}
                 >
                     <img
-                        src={before}
+                        src={before?.trim() ? before : null}
                         alt="Before transformation"
                         className="w-full h-full object-cover max-w-none"
                         style={{ width: `${containerWidth}px` }}

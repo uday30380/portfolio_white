@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
+﻿import React from 'react';
+import { motion } from 'framer-motion';
 import { Trophy, Medal, Award, CheckCircle2, TrendingUp, Star } from 'lucide-react';
 
 const HonorsStats = ({ honors = [], validatedSkills = [] }) => {
@@ -35,8 +35,8 @@ const HonorsStats = ({ honors = [], validatedSkills = [] }) => {
             label: 'Tech Certifications',
             value: certifications,
             icon: Medal,
-            color: 'text-blue-500',
-            bg: 'bg-blue-500/10'
+            color: 'text-[#4B5F5C]',
+            bg: 'bg-[#EEF4F3]'
         },
         {
             label: 'Latest Achievement',
@@ -77,3 +77,4 @@ const HonorsStats = ({ honors = [], validatedSkills = [] }) => {
 };
 
 export default HonorsStats;
+

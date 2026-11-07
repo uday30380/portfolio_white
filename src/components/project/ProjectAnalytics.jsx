@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
+﻿import React, { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { Eye, TrendingUp, Clock, Share2, MapPin, Users } from 'lucide-react';
 
 const ProjectAnalytics = ({ projectId }) => {
@@ -64,8 +64,8 @@ const ProjectAnalytics = ({ projectId }) => {
             icon: Eye,
             label: 'Total Views',
             value: analytics.views,
-            color: 'from-blue-500 to-blue-600',
-            iconColor: 'text-blue-500'
+            color: 'text-[#4B5F5C] text-[#4B5F5C]',
+            iconColor: 'text-[#4B5F5C]'
         },
         {
             icon: Users,
@@ -147,3 +147,4 @@ const ProjectAnalytics = ({ projectId }) => {
 };
 
 export default ProjectAnalytics;
+

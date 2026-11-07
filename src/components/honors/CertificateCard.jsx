@@ -1,5 +1,5 @@
 import React from 'react';
-import { motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
+import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Award, ExternalLink, Share2, Calendar, ShieldCheck, Download, ChevronRight, Star } from 'lucide-react';
 
@@ -16,7 +16,7 @@ const CertificateCard = ({ certificate, index }) => {
                     {/* Image Section */}
                     <div className="relative aspect-[4/3] overflow-hidden bg-black">
                         <img
-                            src={certificate.image}
+                            src={certificate.image?.trim() ? certificate.image : null}
                             alt={certificate.title}
                             className="w-full h-full object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-700"
                         />
@@ -75,3 +75,4 @@ const CertificateCard = ({ certificate, index }) => {
 };
 
 export default CertificateCard;
+

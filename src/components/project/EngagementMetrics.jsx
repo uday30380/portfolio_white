@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
+﻿import React from 'react';
+import { motion } from 'framer-motion';
 import { MousePointer2, Target, ScrollText, BarChart3, TrendingUp } from 'lucide-react';
 
 const EngagementMetrics = () => {
@@ -23,8 +23,8 @@ const EngagementMetrics = () => {
             label: 'Click Through Rate',
             value: '12.4%',
             icon: MousePointer2,
-            color: 'text-blue-500',
-            bg: 'bg-blue-500/10'
+            color: 'text-[#4B5F5C]',
+            bg: 'bg-[#EEF4F3]'
         },
         {
             label: 'Engagement Velocity',
@@ -93,3 +93,4 @@ const EngagementMetrics = () => {
 };
 
 export default EngagementMetrics;
+

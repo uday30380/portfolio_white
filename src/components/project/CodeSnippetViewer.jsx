@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
+﻿import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import { Code, Copy, Check, Terminal } from 'lucide-react';
 
 const CodeSnippetViewer = ({ snippets, title }) => {
@@ -87,3 +87,4 @@ const CodeSnippetViewer = ({ snippets, title }) => {
 };
 
 export default CodeSnippetViewer;
+

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { motion, useMotionValue, useSpring } from 'framer-motion'; // eslint-disable-line no-unused-vars
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 
 const Cursor = () => {
     const [isHovered, setIsHovered] = useState(false);
@@ -15,28 +15,37 @@ const Cursor = () => {
     const cursorY = useSpring(mouseY, springConfig);
 
     useEffect(() => {
+        let currentHovered = false;
+
         const handleMouseMove = (e) => {
             mouseX.set(e.clientX);
             mouseY.set(e.clientY);
 
-            // Auto-detect hoverable elements
             const target = e.target;
-            const isClickable =
-                window.getComputedStyle(target).cursor === 'pointer' ||
+            if (!target || !(target instanceof Element)) return;
+
+            const isClickable = Boolean(
                 target.tagName === 'A' ||
                 target.tagName === 'BUTTON' ||
-                target.closest('a') ||
-                target.closest('button');
+                target.tagName === 'INPUT' ||
+                target.tagName === 'SELECT' ||
+                target.tagName === 'TEXTAREA' ||
+                target.getAttribute('role') === 'button' ||
+                target.closest('a, button, [role="button"], input, select, textarea, .cursor-pointer, [data-cursor-hover]')
+            );
 
-            setIsHovered(!!isClickable);
+            if (isClickable !== currentHovered) {
+                currentHovered = isClickable;
+                setIsHovered(isClickable);
+            }
         };
 
         const handleMouseDown = () => setIsClicked(true);
         const handleMouseUp = () => setIsClicked(false);
 
-        window.addEventListener('mousemove', handleMouseMove);
-        window.addEventListener('mousedown', handleMouseDown);
-        window.addEventListener('mouseup', handleMouseUp);
+        window.addEventListener('mousemove', handleMouseMove, { passive: true });
+        window.addEventListener('mousedown', handleMouseDown, { passive: true });
+        window.addEventListener('mouseup', handleMouseUp, { passive: true });
 
         return () => {
             window.removeEventListener('mousemove', handleMouseMove);
@@ -99,3 +108,4 @@ const Cursor = () => {
 };
 
 export default Cursor;
+

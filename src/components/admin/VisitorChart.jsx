@@ -27,14 +27,12 @@ const VisitorChart = () => {
         const interval = setInterval(() => {
             setData(currentData => {
                 const newData = [...currentData];
-                // Simulate slight random fluctuations for the last data point
                 const lastIndex = newData.length - 1;
-                const variance = Math.floor(Math.random() * 10) - 5; // -5 to +5
+                const variance = Math.floor(Math.random() * 10) - 5;
                 let newVisits = newData[lastIndex].visits + variance;
 
-                // Keep within reasonable bounds
                 if (newVisits < 20) newVisits = 20;
-                if (newVisits > 120) newVisits = 120; // Cap at 120
+                if (newVisits > 120) newVisits = 120;
 
                 newData[lastIndex] = {
                     ...newData[lastIndex],
@@ -48,27 +46,25 @@ const VisitorChart = () => {
     }, []);
 
     return (
-        <div className="bg-[#111111] rounded-[40px] border border-white/5 p-8 h-[400px] flex flex-col relative overflow-hidden group">
+        <div className="bg-white rounded-[12px] border border-[#DDE7E5] p-6 h-[380px] flex flex-col shadow-sm">
             {/* Header */}
-            <div className="flex justify-between items-center mb-6 z-10">
+            <div className="flex justify-between items-center mb-6">
                 <div>
-                    <h3 className="text-lg font-black uppercase tracking-widest text-white flex items-center gap-3">
-                        <Activity className="text-orange-500" size={20} /> Visitor Traffic
+                    <h3 className="text-base font-semibold text-[#102A28] flex items-center gap-2">
+                        <Activity className="text-[#102A28]" size={18} />
+                        <span>Visitor traffic</span>
                     </h3>
-                    <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Real-time Analytics</p>
+                    <p className="text-xs text-[#8A9B98]">Real-time analytics</p>
                 </div>
 
                 {/* Live Indicator */}
-                <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-green-500/10 border border-green-500/20">
-                    <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                    </span>
-                    <span className="text-[10px] font-black uppercase tracking-widest text-green-500">Live</span>
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#EEF4F3] border border-[#DDE7E5]">
+                    <span className="w-2 h-2 rounded-full bg-[#15803D]" />
+                    <span className="text-xs font-medium text-[#15803D]">Live</span>
                 </div>
             </div>
 
-            <div className="flex-1 w-full min-h-0 z-10">
+            <div className="flex-1 w-full min-h-0">
                 <ResponsiveContainer width="100%" height="100%">
                     <AreaChart
                         data={data}
@@ -76,51 +72,44 @@ const VisitorChart = () => {
                     >
                         <defs>
                             <linearGradient id="colorVisits" x1="0" y1="0" x2="0" y2="1">
-                                <stop offset="5%" stopColor="#FF7D44" stopOpacity={0.3} />
-                                <stop offset="95%" stopColor="#FF7D44" stopOpacity={0} />
+                                <stop offset="5%" stopColor="#0F766E" stopOpacity={0.2} />
+                                <stop offset="95%" stopColor="#0F766E" stopOpacity={0} />
                             </linearGradient>
                         </defs>
-                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#ffffff10" />
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#DDE7E5" />
                         <XAxis
                             dataKey="name"
                             axisLine={false}
                             tickLine={false}
-                            tick={{ fill: '#666', fontSize: 10, fontWeight: 900 }}
+                            tick={{ fill: '#8A9B98', fontSize: 11 }}
                             dy={10}
                         />
                         <YAxis
                             axisLine={false}
                             tickLine={false}
-                            tick={{ fill: '#666', fontSize: 10, fontWeight: 900 }}
+                            tick={{ fill: '#8A9B98', fontSize: 11 }}
                         />
                         <Tooltip
                             contentStyle={{
-                                backgroundColor: '#111',
-                                border: '1px solid rgba(255,125,104,0.2)',
-                                borderRadius: '16px',
-                                fontSize: '12px',
-                                fontWeight: '900',
-                                color: '#fff',
-                                boxShadow: '0 10px 40px -10px rgba(0,0,0,0.5)'
+                                backgroundColor: '#FFFFFF',
+                                border: '1px solid #DDE7E5',
+                                borderRadius: '8px',
+                                color: '#102A28',
+                                fontSize: '12px'
                             }}
-                            itemStyle={{ color: '#FF7D44' }}
-                            cursor={{ stroke: '#FF7D44', strokeWidth: 1, strokeDasharray: '4 4' }}
+                            itemStyle={{ color: '#102A28' }}
                         />
                         <Area
                             type="monotone"
                             dataKey="visits"
-                            stroke="#FF7D44"
-                            strokeWidth={3}
+                            stroke="#0F766E"
+                            strokeWidth={2}
                             fillOpacity={1}
                             fill="url(#colorVisits)"
-                            animationDuration={1500}
                         />
                     </AreaChart>
                 </ResponsiveContainer>
             </div>
-
-            {/* Background Glow */}
-            <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-orange-500/5 rounded-full blur-[80px] pointer-events-none group-hover:bg-orange-500/10 transition-colors duration-500"></div>
         </div>
     );
 };

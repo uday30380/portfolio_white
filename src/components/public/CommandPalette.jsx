@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+﻿import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Home, Book, Briefcase, Mail, Moon, Sun, LayoutDashboard, User } from 'lucide-react';
-import { AnimatePresence, motion } from 'framer-motion'; // eslint-disable-line no-unused-vars
+import { AnimatePresence, motion } from 'framer-motion';
 
 const CommandPalette = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -182,3 +182,4 @@ const CommandPalette = () => {
 };
 
 export default CommandPalette;
+
